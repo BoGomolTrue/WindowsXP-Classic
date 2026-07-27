@@ -1,0 +1,7 @@
+services:
+  xp-desktop:
+    build: .
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      PORT: 3003

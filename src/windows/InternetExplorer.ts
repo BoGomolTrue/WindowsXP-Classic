@@ -2,36 +2,18 @@ import { icon } from '../utils/helpers'
 import { showMessage } from '../dialogs/MessageBox'
 import { windowManager, type WindowMenu } from './WindowManager'
 
-const DEFAULT_HOME = (import.meta.env.VITE_IE_HOME_URL as string | undefined)?.trim() || 'about:home'
-
-const WELCOME_HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Домашняя страница</title><style>
-body{margin:0;padding:16px 20px;font:11px Tahoma,Verdana,sans-serif;background:#fff;color:#000}
-h1{font-size:16px;margin:0 0 12px}
-p{margin:0 0 10px;line-height:1.45}
-a{color:#00c}
-ul{margin:8px 0 0;padding-left:18px}
-</style></head><body>
-<h1>Добро пожаловать в Internet Explorer</h1>
-<p>Введите адрес в строке выше или выберите ссылку:</p>
-<ul>
-<li><a href="https://example.com/">example.com</a></li>
-<li><a href="https://ru.wikipedia.org/">Википедия</a></li>
-<li><a href="https://archive.org/">Internet Archive</a></li>
-</ul>
-<p>Не все сайты откроются в окне — многие запрещают встраивание в iframe.</p>
-</body></html>`
+const DEFAULT_HOME = (import.meta.env.VITE_IE_HOME_URL as string | undefined)?.trim() || 'https://vertix-bot.ru'
 
 function normalizeUrl(raw: string): string | null {
   const input = raw.trim()
   if (!input) return null
-  if (input === 'about:home' || input === 'about:blank') return input
+  if (input === 'about:blank') return input
   if (/^https?:\/\//i.test(input)) return input
   if (/^[\w.-]+\.[a-z]{2,}/i.test(input)) return `https://${input}`
   return null
 }
 
 function titleForUrl(url: string): string {
-  if (url === 'about:home') return 'Домашняя страница — Internet Explorer'
   try {
     return `${new URL(url).hostname} — Internet Explorer`
   } catch {
@@ -153,14 +135,10 @@ export function openInternetExplorer(startUrl?: string): void {
     frame.classList.toggle('hidden', show)
   }
 
-  function applyLocalPage(url: string): void {
+  function applyLocalPage(): void {
     showBlocked(false)
     frame.removeAttribute('src')
-    if (url === 'about:blank') {
-      frame.srcdoc = '<!DOCTYPE html><html><body style="margin:0;background:#fff"></body></html>'
-      return
-    }
-    frame.srcdoc = WELCOME_HTML
+    frame.srcdoc = '<!DOCTYPE html><html><body style="margin:0;background:#fff"></body></html>'
   }
 
   function navigate(raw: string, pushHistory = true): void {
@@ -171,13 +149,13 @@ export function openInternetExplorer(startUrl?: string): void {
     }
 
     currentUrl = url
-    addressInput.value = url === 'about:home' ? DEFAULT_HOME : url
+    addressInput.value = url
     windowManager.setTitle(winId, titleForUrl(url))
     setLoading(true)
     showBlocked(false)
 
-    if (url === 'about:home' || url === 'about:blank') {
-      applyLocalPage(url)
+    if (url === 'about:blank') {
+      applyLocalPage()
       setLoading(false)
     } else {
       frame.removeAttribute('srcdoc')
@@ -251,7 +229,7 @@ export function openInternetExplorer(startUrl?: string): void {
 
   frame.addEventListener('load', () => {
     setLoading(false)
-    if (currentUrl === 'about:home' || currentUrl === 'about:blank') return
+    if (currentUrl === 'about:blank') return
 
     try {
       const doc = frame.contentDocument
