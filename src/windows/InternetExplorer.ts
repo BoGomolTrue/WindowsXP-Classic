@@ -233,21 +233,33 @@ export function openInternetExplorer(startUrl?: string): void {
 
     try {
       const doc = frame.contentDocument
-      if (!doc) {
-        showBlocked(true)
+      if (doc) {
+        const href = frame.contentWindow?.location.href ?? ''
+        if (href === 'about:blank' && currentUrl.startsWith('http')) {
+          showBlocked(true)
+          return
+        }
+        showBlocked(false)
+        if (href.startsWith('http')) {
+          currentUrl = href
+          addressInput.value = href
+          windowManager.setTitle(winId, titleForUrl(href))
+        }
         return
       }
-      const href = frame.contentWindow?.location.href ?? ''
-      if (href === 'about:blank' && currentUrl.startsWith('http')) {
-        showBlocked(true)
+
+      try {
+        const href = frame.contentWindow?.location.href ?? ''
+        if (href === 'about:blank' || href === '') {
+          showBlocked(true)
+          return
+        }
+      } catch {
+        showBlocked(false)
         return
       }
+
       showBlocked(false)
-      if (href.startsWith('http')) {
-        currentUrl = href
-        addressInput.value = href
-        windowManager.setTitle(winId, titleForUrl(href))
-      }
     } catch {
       showBlocked(false)
     }
