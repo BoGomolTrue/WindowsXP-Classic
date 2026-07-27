@@ -10,6 +10,7 @@ import {
   FILE_SYSTEM,
   PATH_DESKTOP,
   joinPath,
+  saveFileSystem,
   type FSNode,
 } from './filesystem'
 import { clampToWorkArea, formatDateTime } from '../utils/helpers'
@@ -142,6 +143,7 @@ export function addDesktopFolderNode(name: string): FSNode {
     children: [],
   }
   FILE_SYSTEM.children!.push(node)
+  saveFileSystem()
   return node
 }
 
@@ -155,6 +157,7 @@ export function addDesktopShortcutNode(name: string, target: string, targetIcon:
     shortcutTarget: target,
   }
   FILE_SYSTEM.children!.push(node)
+  saveFileSystem()
   return node
 }
 
@@ -163,11 +166,12 @@ export function removeDesktopNode(name: string): void {
   if (!children) return
   const index = children.findIndex((node) => node.name === name)
   if (index >= 0) children.splice(index, 1)
+  saveFileSystem()
 }
 
 export function renameDesktopNode(oldName: string, newName: string): void {
   const node = FILE_SYSTEM.children?.find((child) => child.name === oldName)
-  if (node) node.name = newName
+  if (node) { node.name = newName; saveFileSystem() }
 }
 
 export function desktopFsPath(name: string): string {

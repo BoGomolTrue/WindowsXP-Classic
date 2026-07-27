@@ -11,6 +11,55 @@ export function installSprite(): void {
   document.body.insertBefore(holder, document.body.firstChild)
 }
 
+const SVG_TO_PNG: Record<string, string> = {
+  'icon-documents': 'MyDocuments.png',
+  'icon-pictures': 'MyPictures.png',
+  'icon-music': 'MyMusic.png',
+  'icon-computer': 'MyComputer.png',
+  'icon-drive': 'LocalDisk.png',
+  'icon-cdrom': 'RemovableMedia.png',
+  'icon-controlpanel': 'ControlPanel.png',
+  'icon-network': 'MyNetworkPlaces.png',
+  'icon-file-jpg': 'JPG.png',
+  'icon-file-text': 'TXT.png',
+  'icon-mediaplayer': 'MPC.png',
+  'icon-notepad': 'Notepad.png',
+  'icon-folder': 'FolderClosed.png',
+  'icon-folder-open': 'FolderOpened.png',
+  'icon-ie': 'InternetExplorer6.png',
+  'icon-outlook': 'OutlookExpress.png',
+  'icon-messenger': 'WindowsMessenger.png',
+  'icon-file-doc': 'DOC.png',
+  'icon-file-xls': 'GenericDocument.png',
+  'icon-file-exe': 'Default.png',
+  'icon-file': 'GenericDocument.png',
+  'icon-catalog': 'AddressBook.png',
+  'icon-recycle': 'RecycleBinempty.png',
+  'icon-printer': 'Printer.png',
+  'icon-programs': 'Programs.png',
+  'icon-find': 'Search.png',
+  'icon-help': 'HelpandSupport.png',
+  'icon-run': 'Run.png',
+  'icon-settings': 'Properties.png',
+  'icon-showdesktop': 'Desktop.png',
+  'icon-winupdate': 'WindowsUpdate.png',
+  'icon-tray-volume': 'Volume.png',
+  'icon-tray-network': 'NetworkConnections.png',
+  'icon-tray-shield': 'SecurityCenter.png',
+  'icon-xp-logo': 'WindowsUpdate.png',
+  'icon-start-flag': 'Power.png',
+  'tb-back': 'Back.png',
+  'tb-forward': 'Forward.png',
+  'tb-up': 'Up.png',
+  'tb-search': 'Search.png',
+  'tb-folders': 'FolderClosed.png',
+  'tb-views': 'FolderView.png',
+  'tb-go': 'Go.png',
+  'tb-stop': 'Stop.png',
+  'tb-refresh': 'Explorer.png',
+  'tb-home': 'Desktop.png',
+}
+
 export function icon(id: string, size = 32, cls = ''): string {
   if (id.startsWith('/') || /\.(webp|jpg|jpeg|gif|svg)$/i.test(id)) {
     const src = id.startsWith('/') ? id : `/images/xp/icons/${id}`
@@ -18,6 +67,10 @@ export function icon(id: string, size = 32, cls = ''): string {
   }
   if (id.endsWith('.png')) {
     return `<img class="${cls}" src="/images/xp/icons/${id}" width="${size}" height="${size}" alt="" draggable="false">`
+  }
+  const png = SVG_TO_PNG[id]
+  if (png) {
+    return `<img class="${cls}" src="/images/xp/icons/${png}" width="${size}" height="${size}" alt="" draggable="false">`
   }
   return `<svg class="${cls}" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><use href="#${id}"/></svg>`
 }

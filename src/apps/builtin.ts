@@ -1,87 +1,79 @@
 import { windowManager } from '../windows/WindowManager'
-import { findNode, FILE_SYSTEM, PATH_DESKTOP, type FSNode } from '../data/filesystem'
+import { findNode, FILE_SYSTEM, PATH_DESKTOP, saveFileSystem, type FSNode } from '../data/filesystem'
 
 /* ═══════════════════════════════════════════════════════════════
-   БЛОКНОТ
+   БЛОКНОТ (Ace Editor)
    ═══════════════════════════════════════════════════════════════ */
 
 export function openNotepad(initial = '', title = 'Блокнот - Безымянный', fsPath?: string): void {
   const root = document.createElement('div')
   root.className = 'notepad'
-  root.innerHTML = `<textarea class="notepad__area" spellcheck="false"></textarea>`
-  const area = root.querySelector('textarea')!
-  area.value = initial
+  const iframe = document.createElement('iframe')
+  iframe.className = 'notepad__iframe'
+  iframe.src = '/html/notepad/index.html'
+  iframe.setAttribute('frameborder', '0')
+  root.appendChild(iframe)
 
-  const historyArr: string[] = [initial]
-  let histIdx = 0
-  let savedContent = initial
   let currentFsPath = fsPath
+  let dirty = false
   let wordWrap = false
 
-  const applyWordWrap = () => {
-    area.style.whiteSpace = wordWrap ? 'pre-wrap' : 'pre'
-    area.style.overflowX = wordWrap ? 'hidden' : 'auto'
-    area.wrap = wordWrap ? 'soft' : 'off'
-  }
-  applyWordWrap()
+  const getEditor = () => iframe.contentWindow as any
 
   const markDirty = () => {
-    const dirty = area.value !== savedContent
     const baseName = title.replace(/ - Блокнот$/, '').replace(/^\*/, '*')
     windowManager.setTitle(winId, dirty ? `*${baseName} - Блокнот` : `${baseName} - Блокнот`)
   }
 
-  area.addEventListener('input', () => {
-    historyArr.length = histIdx + 1
-    historyArr.push(area.value)
-    histIdx = historyArr.length - 1
+  const syncDirty = () => {
+    const ed = getEditor()
+    if (!ed || !ed.is_dirty) return
+    dirty = ed.is_dirty()
     markDirty()
-  })
-
-  const undo = () => { if (histIdx > 0) { histIdx--; area.value = historyArr[histIdx]!; markDirty() } }
-  const redo = () => { if (histIdx < historyArr.length - 1) { histIdx++; area.value = historyArr[histIdx]!; markDirty() } }
+  }
 
   const save = () => {
-    if (!currentFsPath) return
-    const node = findNode(currentFsPath)
-    if (node) { node.content = area.value; savedContent = area.value; markDirty() }
+    const ed = getEditor()
+    if (!ed || !ed.get_content) return
+    const content = ed.get_content()
+    if (currentFsPath) {
+      const node = findNode(currentFsPath)
+      if (node) { node.content = content; ed.set_clean?.(); dirty = false; markDirty(); saveFileSystem() }
+    }
   }
 
   const saveAs = async () => {
+    const ed = getEditor()
+    if (!ed || !ed.get_content) return
     const { showPrompt } = await import('../dialogs/PromptDialog')
     const name = await showPrompt('Введите имя нового файла:', 'Сохранение как')
     if (!name) return
     currentFsPath = `Рабочий стол\\${name}`
+    const content = ed.get_content()
     const parent = findNode(PATH_DESKTOP)
     if (parent) {
       if (!parent.children) parent.children = []
-      parent.children.push({ name, type: 'file', icon: 'icon-file-text', content: area.value, size: `${Math.ceil(area.value.length / 1024)} КБ`, modified: new Date().toLocaleString('ru-RU') })
+      parent.children.push({ name, type: 'file', icon: 'icon-file-text', content, size: `${Math.ceil(content.length / 1024)} КБ`, modified: new Date().toLocaleString('ru-RU') })
     }
-    savedContent = area.value
+    ed.set_clean?.()
+    dirty = false
     windowManager.setTitle(winId, `${name} - Блокнот`)
   }
 
-  const findDialog = async () => {
-    const { showPrompt } = await import('../dialogs/PromptDialog')
-    const query = await showPrompt('Найти:', 'Найти')
-    if (!query) return
-    const idx = area.value.toLowerCase().indexOf(query.toLowerCase())
-    if (idx >= 0) { area.setSelectionRange(idx, idx + query.length); area.focus() }
-    else { const { showMessage } = await import('../dialogs/MessageBox'); void showMessage(`Не удалось найти «${query}».`, 'Блокнот', 'info') }
-  }
+  iframe.addEventListener('load', () => {
+    const ed = getEditor()
+    if (!ed || !ed.set_content) return
+    if (initial) ed.set_content(initial)
+    ed.set_clean?.()
+    dirty = false
 
-  const gotoLine = async () => {
-    const { showPrompt } = await import('../dialogs/PromptDialog')
-    const val = await showPrompt('Номер строки:', 'Перейти к строке')
-    if (!val) return
-    const line = parseInt(val, 10)
-    if (isNaN(line) || line < 1) return
-    const lines = area.value.split('\n')
-    let pos = 0
-    for (let i = 0; i < Math.min(line - 1, lines.length); i++) pos += lines[i]!.length + 1
-    area.setSelectionRange(pos, pos)
-    area.focus()
-  }
+    ed.dirty_state_changed = () => { syncDirty() }
+
+    ed.parent_key_event = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 's') { e.preventDefault(); e.stopPropagation(); save(); return true }
+      return false
+    }
+  })
 
   const winId = windowManager.open({
     title, icon: 'icon-notepad', width: 640, height: 480, content: root,
@@ -91,32 +83,16 @@ export function openNotepad(initial = '', title = 'Блокнот - Безымя
         { label: 'Сохранить &как...', action: () => void saveAs() },
       ]},
       { label: '&Правка', items: [
-        { label: '&Отменить', shortcut: 'Ctrl+Z', action: undo },
-        { label: '&Повторить', shortcut: 'Ctrl+Y', action: redo },
+        { label: '&Отменить', shortcut: 'Ctrl+Z', action: () => getEditor()?.undo?.() },
+        { label: '&Повторить', shortcut: 'Ctrl+Y', action: () => getEditor()?.redo?.() },
         { separator: true },
-        { label: '&Вырезать', shortcut: 'Ctrl+X', action: () => document.execCommand('cut') },
-        { label: '&Копировать', shortcut: 'Ctrl+C', action: () => document.execCommand('copy') },
-        { label: '&Вставить', shortcut: 'Ctrl+V', action: () => document.execCommand('paste') },
-        { label: 'Удал&ить', shortcut: 'Del', action: () => document.execCommand('delete') },
-        { separator: true },
-        { label: 'Най&ти...', shortcut: 'Ctrl+F', action: findDialog },
-        { label: 'Перейти к &строке...', shortcut: 'Ctrl+G', action: () => void gotoLine() },
-        { separator: true },
-        { label: 'Вы&делить всё', shortcut: 'Ctrl+A', action: () => area.select() },
+        { label: 'Най&ти...', shortcut: 'Ctrl+F', action: () => getEditor()?.find?.() },
+        { label: 'Заме&нить...', shortcut: 'Ctrl+H', action: () => getEditor()?.replace?.() },
       ]},
       { label: '&Вид', items: [
-        { label: 'Пе&ренос слов', checked: wordWrap, action: () => { wordWrap = !wordWrap; applyWordWrap() } },
-        { label: '&Строка состояния', disabled: true },
+        { label: 'Пе&ренос слов', checked: wordWrap, action: () => { wordWrap = !wordWrap; getEditor()?.toggle_wrap?.() } },
       ]},
     ],
-  })
-
-  area.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 's') { e.preventDefault(); save() }
-    if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo() }
-    if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo() }
-    if (e.ctrlKey && e.key === 'f') { e.preventDefault(); findDialog() }
-    if (e.ctrlKey && e.key === 'g') { e.preventDefault(); void gotoLine() }
   })
 }
 
@@ -528,199 +504,34 @@ export function openCommandPrompt(): void {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PAINT
+   PAINT (jspaint)
    ═══════════════════════════════════════════════════════════════ */
 
-export function openPaint(title = 'Безымянный - Paint'): void {
+export function openPaint(title = 'Безымянный - Paint', imageMediaUrl?: string): void {
   const root = document.createElement('div')
   root.className = 'paint'
-  const canvas = document.createElement('canvas')
-  canvas.width = 640
-  canvas.height = 420
-  canvas.className = 'paint__canvas'
+  const iframe = document.createElement('iframe')
+  iframe.className = 'paint__iframe'
+  iframe.src = '/html/jspaint/index.html'
+  iframe.setAttribute('frameborder', '0')
+  root.appendChild(iframe)
 
-  const toolbar = document.createElement('div')
-  toolbar.className = 'paint__toolbar'
-  toolbar.innerHTML = `
-    <div class="paint__tools">
-      <button class="paint__tool paint__tool--active" data-tool="brush" title="Кисть">✏</button>
-      <button class="paint__tool" data-tool="line" title="Линия">╱</button>
-      <button class="paint__tool" data-tool="rect" title="Прямоугольник">▭</button>
-      <button class="paint__tool" data-tool="ellipse" title="Эллипс">◯</button>
-      <button class="paint__tool" data-tool="fill" title="Заливка">◐</button>
-      <button class="paint__tool" data-tool="eraser" title="Ластик">◻</button>
-      <button class="paint__tool" data-tool="picker" title="Пипетка">◉</button>
-      <button class="paint__tool" data-tool="text" title="Текст">A</button>
-    </div>
-    <div class="paint__sep"></div>
-    <div class="paint__sizes">
-      <span style="font-size:10px">Размер:</span>
-      <input type="range" class="paint__size" min="1" max="20" value="2" />
-      <span class="paint__size-label">2</span>
-    </div>
-    <div class="paint__sep"></div>
-    <div class="paint__palette" id="paint-palette"></div>
-  `
-
-  const palette = toolbar.querySelector('#paint-palette')!
-  const colors = ['#000000','#808080','#800000','#808000','#008000','#008080','#000080','#800080',
-    '#ffffff','#c0c0c0','#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff',
-    '#c08040','#ff8000','#00ff80','#80ffff','#8080ff','#ff0080','#804000','#408000']
-  for (const c of colors) {
-    const swatch = document.createElement('button')
-    swatch.className = 'paint__swatch'
-    swatch.style.background = c
-    swatch.dataset.color = c
-    swatch.title = c
-    palette.appendChild(swatch)
-  }
-
-  root.appendChild(toolbar)
-  const canvasWrap = document.createElement('div')
-  canvasWrap.className = 'paint__canvas-wrap'
-  canvasWrap.appendChild(canvas)
-  root.appendChild(canvasWrap)
-  const ctx = canvas.getContext('2d')!
-  ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  let currentTool = 'brush'
-  let color = '#000000'
-  let lineWidth = 2
-  let drawing = false
-  let startX = 0, startY = 0
-  let snapshot: ImageData | null = null
-  const undoStack: ImageData[] = []
-  const redoStack: ImageData[] = []
-
-  const saveState = () => {
-    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
-    if (undoStack.length > 30) undoStack.shift()
-    redoStack.length = 0
-  }
-
-  const undo = () => { if (!undoStack.length) return; redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height)); ctx.putImageData(undoStack.pop()!, 0, 0) }
-  const redo = () => { if (!redoStack.length) return; undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height)); ctx.putImageData(redoStack.pop()!, 0, 0) }
-
-  toolbar.querySelectorAll<HTMLElement>('.paint__tool').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      toolbar.querySelectorAll('.paint__tool').forEach((b) => b.classList.remove('paint__tool--active'))
-      btn.classList.add('paint__tool--active')
-      currentTool = btn.dataset.tool!
-      canvas.style.cursor = currentTool === 'fill' ? 'crosshair' : currentTool === 'picker' ? 'crosshair' : currentTool === 'text' ? 'text' : 'crosshair'
-    })
-  })
-
-  palette.addEventListener('click', (e) => {
-    const sw = (e.target as HTMLElement).closest<HTMLElement>('[data-color]')
-    if (sw) { color = (sw as HTMLElement).dataset.color!; palette.querySelectorAll('.paint__swatch').forEach((s) => s.classList.remove('paint__swatch--active')); sw.classList.add('paint__swatch--active') }
-  })
-
-  const sizeInput = toolbar.querySelector<HTMLInputElement>('.paint__size')!
-  const sizeLabel = toolbar.querySelector<HTMLElement>('.paint__size-label')!
-  sizeInput.addEventListener('input', () => { lineWidth = parseInt(sizeInput.value); sizeLabel.textContent = String(lineWidth) })
-
-  const getPos = (e: MouseEvent) => {
-    const r = canvas.getBoundingClientRect()
-    return { x: e.clientX - r.left, y: e.clientY - r.top }
-  }
-
-  canvas.addEventListener('mousedown', (e) => {
-    const pos = getPos(e)
-    drawing = true
-    startX = pos.x; startY = pos.y
-    if (currentTool === 'brush' || currentTool === 'eraser') {
-      saveState()
-      ctx.beginPath()
-      ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : color
-      ctx.lineWidth = currentTool === 'eraser' ? lineWidth * 3 : lineWidth
-      ctx.lineCap = 'round'
-      ctx.lineJoin = 'round'
-      ctx.moveTo(pos.x, pos.y)
-    } else if (currentTool === 'line' || currentTool === 'rect' || currentTool === 'ellipse') {
-      saveState()
-      snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    } else if (currentTool === 'fill') {
-      saveState()
-      floodFill(pos.x, pos.y, color)
-    } else if (currentTool === 'picker') {
-      const pixel = ctx.getImageData(pos.x, pos.y, 1, 1).data
-      color = `#${[pixel[0], pixel[1], pixel[2]].map((v) => v.toString(16).padStart(2, '0')).join('')}`
-      palette.querySelectorAll<HTMLElement>('.paint__swatch').forEach((s) => s.classList.toggle('paint__swatch--active', s.dataset.color === color))
-    } else if (currentTool === 'text') {
-      saveState()
-      const text = prompt('Введите текст:')
-      if (text) {
-        ctx.fillStyle = color
-        ctx.font = `${Math.max(lineWidth * 4, 14)}px Tahoma`
-        ctx.fillText(text, pos.x, pos.y)
+  const loadImageIntoPaint = async () => {
+    if (!imageMediaUrl) return
+    try {
+      const ed = iframe.contentWindow as any
+      if (ed?.load_image_from_uri) {
+        await ed.load_image_from_uri(imageMediaUrl)
       }
-    }
-  })
-
-  canvas.addEventListener('mousemove', (e) => {
-    if (!drawing) return
-    const pos = getPos(e)
-    if (currentTool === 'brush' || currentTool === 'eraser') {
-      ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : color
-      ctx.lineWidth = currentTool === 'eraser' ? lineWidth * 3 : lineWidth
-      ctx.lineTo(pos.x, pos.y)
-      ctx.stroke()
-    } else if ((currentTool === 'line' || currentTool === 'rect' || currentTool === 'ellipse') && snapshot) {
-      ctx.putImageData(snapshot, 0, 0)
-      ctx.strokeStyle = color
-      ctx.lineWidth = lineWidth
-      ctx.beginPath()
-      if (currentTool === 'line') {
-        ctx.moveTo(startX, startY); ctx.lineTo(pos.x, pos.y); ctx.stroke()
-      } else if (currentTool === 'rect') {
-        ctx.strokeRect(startX, startY, pos.x - startX, pos.y - startY)
-      } else {
-        ctx.beginPath()
-        ctx.ellipse(startX, startY, Math.abs(pos.x - startX), Math.abs(pos.y - startY), 0, 0, Math.PI * 2)
-        ctx.stroke()
-      }
-    }
-  })
-
-  canvas.addEventListener('mouseup', () => { drawing = false; snapshot = null })
-  canvas.addEventListener('mouseleave', () => { drawing = false; snapshot = null })
-
-  const floodFill = (sx: number, sy: number, fillColor: string) => {
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    const data = imgData.data
-    const w = canvas.width
-    const h = canvas.height
-    const idx = (sy * w + sx) * 4
-    const targetColor = [data[idx], data[idx + 1], data[idx + 2], data[idx + 3]]
-    const hex = fillColor.replace('#', '')
-    const fill = [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16), 255]
-    if (targetColor[0] === fill[0] && targetColor[1] === fill[1] && targetColor[2] === fill[2]) return
-    const stack = [[sx, sy]]
-    const visited = new Set<number>()
-    while (stack.length) {
-      const [cx, cy] = stack.pop()!
-      if (cx < 0 || cy < 0 || cx >= w || cy >= h) continue
-      const ci = cy * w + cx
-      if (visited.has(ci)) continue
-      visited.add(ci)
-      const pi = ci * 4
-      if (Math.abs(data[pi]! - targetColor[0]!) > 10 || Math.abs(data[pi + 1]! - targetColor[1]!) > 10 || Math.abs(data[pi + 2]! - targetColor[2]!) > 10) continue
-      data[pi] = fill[0]; data[pi + 1] = fill[1]; data[pi + 2] = fill[2]; data[pi + 3] = 255
-      stack.push([cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1])
-    }
-    ctx.putImageData(imgData, 0, 0)
+    } catch { /* silent */ }
   }
+
+  iframe.addEventListener('load', () => {
+    loadImageIntoPaint()
+  })
 
   windowManager.open({
     title, icon: 'icon-file-jpg', width: 700, height: 540, content: root,
-    menu: () => [
-      { label: '&Редактирование', items: [
-        { label: '&Отменить', shortcut: 'Ctrl+Z', action: undo },
-        { label: '&Повторить', shortcut: 'Ctrl+Y', action: redo },
-      ]},
-    ],
-    onClose: () => { document.removeEventListener('mouseup', () => {}) },
   })
 }
 

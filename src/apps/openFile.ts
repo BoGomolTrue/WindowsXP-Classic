@@ -66,11 +66,11 @@ export function openFileByNode(item: FSNode, parentPath: string): void {
     return
   }
   if (ext === 'txt' || ext === 'log') {
-    openNotepad(fileContent(item, ''), `${item.name} - Блокнот`)
+    openNotepad(fileContent(item, ''), `${item.name} - Блокнот`, parentPath + '\\' + item.name)
     return
   }
   if (ext === 'ini' || ext === 'bat') {
-    openNotepad(fileContent(item, `@echo off\n`), `${item.name} - Блокнот`)
+    openNotepad(fileContent(item, `@echo off\n`), `${item.name} - Блокнот`, parentPath + '\\' + item.name)
     return
   }
   if (ext === 'doc') {
@@ -86,7 +86,7 @@ export function openFileByNode(item: FSNode, parentPath: string): void {
       openImageViewer({ title: item.name, mediaUrl: item.mediaUrl, parentPath, fileName: item.name })
       return
     }
-    openPaint(`${item.name} - Paint`)
+    openPaint(`${item.name} - Paint`, item.mediaUrl)
     return
   }
   if (isAudioFile(item.name)) {

@@ -5,6 +5,7 @@ import {
   joinPath,
   kindOf,
   resolve,
+  saveFileSystem,
   type FSNode,
 } from './filesystem'
 import { formatDateTime } from '../utils/helpers'
@@ -40,6 +41,7 @@ export function addFolder(parentPath: string, baseName = 'Новая папка'
     children: [],
   }
   parent.children.push(node)
+  saveFileSystem()
   return node
 }
 
@@ -57,6 +59,7 @@ export function addTextFile(parentPath: string, baseName = 'Новый текс�
     content: '',
   }
   parent.children.push(node)
+  saveFileSystem()
   return node
 }
 
@@ -79,6 +82,7 @@ export function addShortcutFile(
     shortcutTarget: target,
   }
   parent.children.push(node)
+  saveFileSystem()
   return node
 }
 
@@ -88,6 +92,7 @@ export function removeChild(parentPath: string, name: string): FSNode | null {
   const index = parent.children.findIndex((child) => child.name === name)
   if (index < 0) return null
   const [removed] = parent.children.splice(index, 1)
+  saveFileSystem()
   return removed ?? null
 }
 
@@ -100,6 +105,7 @@ export function renameChild(parentPath: string, oldName: string, newName: string
   }
   item.name = newName
   item.modified = formatDateTime(new Date())
+  saveFileSystem()
   return true
 }
 
@@ -117,6 +123,7 @@ export function copyChildren(fromPath: string, names: string[], toPath: string, 
     to.children.push(clone)
     if (cut) removeChild(fromPath, name)
   }
+  saveFileSystem()
   return true
 }
 

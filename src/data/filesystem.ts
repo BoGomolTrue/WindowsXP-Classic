@@ -1,5 +1,7 @@
 import { BOOT_INI_EGG, NOTES_EGG } from './easter-eggs'
 
+const FS_STORAGE_KEY = 'xp-desktop-fs-v1'
+
 export interface FSNode {
   name: string
   type: 'folder' | 'file'
@@ -162,6 +164,31 @@ export const FILE_SYSTEM: FSNode = {
     { name: 'Корзина', type: 'folder', icon: 'icon-recycle', addr: 'Корзина', children: [] },
   ],
 }
+
+const DEFAULT_DESKTOP_NAMES = new Set(FILE_SYSTEM.children!.map((c) => c.name))
+
+export function saveFileSystem(): void {
+  try {
+    const desktopChildren = FILE_SYSTEM.children ?? []
+    const userNodes = desktopChildren.filter((c) => !DEFAULT_DESKTOP_NAMES.has(c.name))
+    localStorage.setItem(FS_STORAGE_KEY, JSON.stringify(userNodes))
+  } catch { /* quota exceeded or private mode */ }
+}
+
+export function loadFileSystem(): void {
+  try {
+    const raw = localStorage.getItem(FS_STORAGE_KEY)
+    if (!raw) return
+    const saved = JSON.parse(raw) as FSNode[]
+    if (!Array.isArray(saved)) return
+    for (const node of saved) {
+      const exists = FILE_SYSTEM.children!.some((c) => c.name === node.name)
+      if (!exists) FILE_SYSTEM.children!.push(node)
+    }
+  } catch { /* corrupted data */ }
+}
+
+loadFileSystem()
 
 export function splitPath(path: string): string[] {
   return path.split(SEP).filter(Boolean)
