@@ -2,6 +2,25 @@
    Windows XP — тема Luna (синяя)
    ═══════════════════════════════════════════════════════════════ */
 
+@font-face {
+  font-family: MSSS;
+  src: url("/fonts/ms_sans_serif.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: MSSS;
+  src: url("/fonts/ms_sans_serif_bold.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: Levi;
+  src: url("/fonts/levi.ttf");
+}
+@font-face {
+  font-family: Trebuchet;
+  src: url("/fonts/trebuchet.ttf");
+}
+
 :root {
   --btn-face: #ece9d8;
   --btn-hilight: #ffffff;
@@ -33,8 +52,8 @@
   --app-workspace: #808080;
   --info-window: #ffffe1;
 
-  --font: Tahoma, "MS Sans Serif", "Segoe UI", sans-serif;
-  --font-title: "Trebuchet MS", Trebuchet, Tahoma, sans-serif;
+  --font: MSSS, Tahoma, "MS Sans Serif", "Segoe UI", sans-serif;
+  --font-title: Trebuchet, "Trebuchet MS", Tahoma, sans-serif;
   --font-size: 11px;
 
   --taskbar-h: 30px;
@@ -219,12 +238,8 @@
   align-items: center;
   gap: 5px;
   padding: 0 12px 0 8px;
-  background: linear-gradient(180deg, #5cb85c 0%, #3d9a3d 48%, #2d842d 52%, #1f6f1f 100%);
+  background: url("/images/xp/start_btn_normal.png") center / cover no-repeat;
   border: none;
-  border-radius: 0 12px 12px 0;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 35%),
-    inset 0 -1px 0 rgb(0 0 0 / 20%);
   cursor: var(--cur-default);
 }
 
@@ -2692,23 +2707,6 @@
 }
 
 .hidden { display: none !important; }
-
-::-webkit-scrollbar {
-  width: 17px;
-  height: 17px;
-}
-
-::-webkit-scrollbar-corner {
-  background: #dfdfdf;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #c8d6fb;
-  background-size: 7px;
-  border: 1px solid #fff;
-  border-radius: 2px;
-  box-shadow: inset -3px 0 #bad1fc, inset 1px 1px #b7caf5;
-}
 
 .mpc {
   display: flex;

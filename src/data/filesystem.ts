@@ -59,7 +59,6 @@ export const FILE_SYSTEM: FSNode = {
         { name: 'report.doc', type: 'file', icon: 'icon-file-doc', size: '24 КБ', modified: '15.03.2005 11:47', content: 'Отчёт\n' },
         { name: 'budget.xls', type: 'file', icon: 'icon-file-xls', size: '58 КБ', modified: '22.01.2005 16:03' },
         { name: 'notes.txt', type: 'file', icon: 'icon-file-text', size: '2 КБ', modified: '28.03.2005 08:12', content: NOTES_EGG },
-        { name: 'some stuff.zip', type: 'file', icon: 'Zipfolder.png', size: '4 КБ', modified: '08.08.2004 14:00', mediaUrl: '/files/some_stuff.zip' },
       ],
     },
     {
@@ -148,20 +147,6 @@ export const FILE_SYSTEM: FSNode = {
           addr: 'E:\\',
           kind: 'Компакт-диск',
           children: [],
-        },
-        {
-          name: 'Панель управления',
-          type: 'folder',
-          icon: 'icon-controlpanel',
-          addr: 'Панель управления',
-          kind: 'Системная папка',
-          children: [
-            { name: 'Экран', type: 'file', icon: 'icon-showdesktop', kind: 'Элемент панели управления' },
-            { name: 'Принтеры и факсы', type: 'file', icon: 'icon-printer', kind: 'Элемент панели управления' },
-            { name: 'Система', type: 'file', icon: 'icon-computer', kind: 'Элемент панели управления' },
-            { name: 'Сетевые подключения', type: 'file', icon: 'icon-network', kind: 'Элемент панели управления' },
-            { name: 'Установка и удаление программ', type: 'file', icon: 'icon-programs', kind: 'Элемент панели управления' },
-          ],
         },
       ],
     },

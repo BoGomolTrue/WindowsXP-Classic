@@ -112,10 +112,7 @@ export class Desktop {
       </div>
 
       <div class="taskbar">
-        <button class="taskbar__start" id="start-btn" type="button" title="Пуск">
-          <img class="taskbar__start-logo" src="/images/ms.png" width="20" height="20" alt="">
-          <span class="taskbar__start-label">Пуск</span>
-        </button>
+        <button class="taskbar__start" id="start-btn" type="button" title="Пуск"></button>
         <div class="taskbar__sep"></div>
         <div class="taskbar__quicklaunch">
           <button class="taskbar__ql-btn" type="button" data-ql="desktop" title="Свернуть все окна">${icon('icon-showdesktop', 16)}</button>
@@ -1041,6 +1038,7 @@ export class Desktop {
           { separator: true },
           { label: 'Адресная книга', icon: 'icon-catalog', action: () => launchByName('Адресная книга') },
           { label: 'Internet Explorer', icon: 'icon-ie', action: () => this.launchIE() },
+          { label: 'Telegram', icon: '/Telegram_2019_Logo.svg.webp', action: () => openTelegram() },
           { label: 'Outlook Express', icon: 'icon-outlook', action: () => launchByName('Outlook Express') },
           { label: 'Windows Media Player', icon: 'icon-mediaplayer', action: () => launchByName('Windows Media Player') },
           { label: 'Windows Messenger', icon: 'icon-messenger', action: () => launchByName('Windows Messenger') },

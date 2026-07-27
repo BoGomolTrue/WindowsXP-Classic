@@ -155,14 +155,16 @@ export function showWelcomeOverlay(): Promise<void> {
     }
 
     const audio = new Audio('/audio/xp_startup.mp3')
-    audio.addEventListener('ended', finish)
-    audio.addEventListener('error', finish)
-    audio.addEventListener('canplaythrough', () => {
-      audio.play().catch(finish)
-    }, { once: true })
     audio.load()
 
-    setTimeout(finish, 7000)
+    const tryPlay = () => {
+      if (audio.readyState >= 2) {
+        audio.play().catch(() => {})
+      }
+    }
+
+    document.addEventListener('click', tryPlay, { once: true })
+    setTimeout(finish, 4000)
   })
 }
 
