@@ -9,6 +9,7 @@ import { showMenu, type MenuItem } from '../ui/Menu'
 import { showMessage } from '../dialogs/MessageBox'
 import { showProperties } from '../dialogs/PropertiesDialog'
 import { showAbout } from '../dialogs/AboutDialog'
+import { openInternetExplorer } from './InternetExplorer'
 
 type ViewMode = 'details' | 'icons'
 
@@ -333,13 +334,17 @@ export function openExplorer(startPath: string = PATH_MY_COMPUTER): void {
     if (!item) return
     if (item.type === 'folder') {
       go(path + SEP + item.name)
-    } else {
-      showMessage(
-        `Не удается открыть файл «${item.name}».\n\nВыберите программу для открытия этого файла.`,
-        'Windows',
-        'error',
-      )
+      return
     }
+    if (item.name === 'iexplore.exe') {
+      openInternetExplorer()
+      return
+    }
+    showMessage(
+      `Не удается открыть файл «${item.name}».\n\nВыберите программу для открытия этого файла.`,
+      'Windows',
+      'error',
+    )
   }
 
   /* ───────────────────────── меню ───────────────────────── */

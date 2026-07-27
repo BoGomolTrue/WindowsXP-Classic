@@ -376,6 +376,16 @@
     <circle cx="8" cy="8" r="7" fill="url(#g-green)" stroke="#12520a" stroke-width=".8"/>
     <path d="M6 4.5 10.5 8 6 11.5z" fill="#fff"/>
   </symbol>
+  <symbol id="tb-stop" viewBox="0 0 24 24">
+    <rect x="5" y="5" width="14" height="14" rx="1" fill="url(#g-red)" stroke="#8d0f03" stroke-width=".8"/>
+  </symbol>
+  <symbol id="tb-refresh" viewBox="0 0 24 24">
+    <path d="M12 4a8 8 0 1 0 7.2 11.6" fill="none" stroke="#12520a" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M12 4V1.5l3 2.5-3 2.5V4z" fill="url(#g-green)" stroke="#12520a" stroke-width=".7"/>
+  </symbol>
+  <symbol id="tb-home" viewBox="0 0 24 24">
+    <path d="M12 3 3 11h2v9h6v-6h2v6h6v-9h2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".8" stroke-linejoin="round"/>
+  </symbol>
 
   <!-- ══════════ Панель задач, 16×16 ══════════ -->
 

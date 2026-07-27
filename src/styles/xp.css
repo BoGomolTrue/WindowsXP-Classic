@@ -1652,3 +1652,83 @@
 .about__spacer {
   flex: 1;
 }
+
+.hidden {
+  display: none !important;
+}
+
+.combo__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0 4px;
+  background: transparent;
+  color: var(--window-text);
+  font: inherit;
+  outline: none;
+}
+
+.ie {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--btn-face);
+}
+
+.ie__toolbar {
+  flex-shrink: 0;
+  padding: 2px 3px;
+  gap: 1px;
+}
+
+.ie__address {
+  flex-shrink: 0;
+  padding: 0 3px 3px;
+}
+
+.ie__combo {
+  gap: 4px;
+  padding-right: 2px;
+}
+
+.ie__frame-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 0 3px;
+  background: var(--window);
+  box-shadow:
+    inset -1px -1px 0 var(--btn-hilight),
+    inset 1px 1px 0 var(--btn-shadow),
+    inset -2px -2px 0 var(--btn-light),
+    inset 2px 2px 0 var(--btn-dkshadow);
+}
+
+.ie__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.ie__blocked {
+  position: absolute;
+  inset: 0;
+  padding: 24px 28px;
+  background: #fff;
+  font: 11px Tahoma, Verdana, sans-serif;
+  line-height: 1.45;
+}
+
+.ie__blocked p {
+  margin: 0 0 10px;
+}
+
+.ie__status {
+  flex-shrink: 0;
+  margin-top: 3px;
+}

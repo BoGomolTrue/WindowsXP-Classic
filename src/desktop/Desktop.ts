@@ -6,6 +6,7 @@ import {
 import { accel, escapeHtml, formatClock, icon } from '../utils/helpers'
 import { windowManager } from '../windows/WindowManager'
 import { openExplorer } from '../windows/Explorer'
+import { openInternetExplorer } from '../windows/InternetExplorer'
 import { showMessage } from '../dialogs/MessageBox'
 import { showProperties } from '../dialogs/PropertiesDialog'
 import { showAbout } from '../dialogs/AboutDialog'
@@ -258,11 +259,7 @@ export class Desktop {
   }
 
   private launchIE(): void {
-    showMessage(
-      'Не удается отобразить страницу\n\nВозможно, возникли неполадки при подключении, либо адрес указан неверно.',
-      'Internet Explorer',
-      'error',
-    )
+    openInternetExplorer()
   }
 
   private stub(name: string): void {
