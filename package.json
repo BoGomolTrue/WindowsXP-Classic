@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 3003 --strictPort",
-    "deploy": "bash scripts/deploy.sh"
+    "build": "tsc && vite build"
   },
   "devDependencies": {
     "typescript": "~6.0.2",
