@@ -1561,6 +1561,71 @@
   padding-top: 2px;
 }
 
+/* Образец оформления в «Свойствах экрана» */
+.props__preview-screen {
+  height: 128px;
+  padding: 10px 12px 0;
+  background: var(--desktop);
+  overflow: hidden;
+  box-shadow:
+    inset -1px -1px 0 var(--btn-hilight),
+    inset 1px 1px 0 var(--btn-shadow),
+    inset -2px -2px 0 var(--btn-light),
+    inset 2px 2px 0 var(--btn-dkshadow);
+}
+
+.props__preview-win {
+  padding: 3px;
+  background: var(--btn-face);
+  box-shadow:
+    inset -1px -1px 0 var(--btn-dkshadow),
+    inset 1px 1px 0 var(--btn-light),
+    inset -2px -2px 0 var(--btn-shadow),
+    inset 2px 2px 0 var(--btn-hilight);
+}
+
+.props__preview-caption {
+  height: 16px;
+  padding: 1px 3px;
+  background: linear-gradient(90deg, var(--active-title), var(--gradient-active-title));
+  color: var(--title-text);
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.props__preview-menu {
+  height: 15px;
+  padding: 1px 3px;
+  font-size: 10px;
+}
+
+.props__preview-body {
+  height: 54px;
+  padding: 4px;
+  background: var(--window);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  box-shadow:
+    inset -1px -1px 0 var(--btn-hilight),
+    inset 1px 1px 0 var(--btn-shadow);
+}
+
+.props__preview-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 18px;
+  font-size: 10px;
+  background: var(--btn-face);
+  box-shadow:
+    inset -1px -1px 0 var(--btn-dkshadow),
+    inset 1px 1px 0 var(--btn-hilight),
+    inset -2px -2px 0 var(--btn-shadow),
+    inset 2px 2px 0 var(--btn-light);
+}
+
 /* О системе */
 .about__top {
   display: flex;

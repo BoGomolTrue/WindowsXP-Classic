@@ -1,4 +1,8 @@
 import { DESKTOP_ICONS, USER_NAME } from '../data/icons'
+import {
+  PATH_CONTROL_PANEL, PATH_MY_COMPUTER, PATH_MY_DOCUMENTS,
+  PATH_MY_MUSIC, PATH_MY_PICTURES, PATH_NETWORK,
+} from '../data/filesystem'
 import { accel, escapeHtml, formatClock, icon } from '../utils/helpers'
 import { windowManager } from '../windows/WindowManager'
 import { openExplorer } from '../windows/Explorer'
@@ -6,8 +10,6 @@ import { showMessage } from '../dialogs/MessageBox'
 import { showProperties } from '../dialogs/PropertiesDialog'
 import { showAbout } from '../dialogs/AboutDialog'
 import { closeAllMenus, showMenu, showSubmenuFor, type MenuItem } from '../ui/Menu'
-
-const DOCS = 'Мой компьютер\\Локальный диск (C:)\\Documents and Settings\\Пользователь\\Мои документы'
 
 export class Desktop {
   private root: HTMLElement
@@ -247,9 +249,9 @@ export class Desktop {
 
   private openIcon(id: string): void {
     switch (id) {
-      case 'my-computer': openExplorer(); break
-      case 'my-documents': openExplorer(DOCS); break
-      case 'network': openExplorer('Мой компьютер'); break
+      case 'my-computer': openExplorer(PATH_MY_COMPUTER); break
+      case 'my-documents': openExplorer(PATH_MY_DOCUMENTS); break
+      case 'network': openExplorer(PATH_NETWORK); break
       case 'recycle-bin': showMessage('Корзина пуста.', 'Корзина', 'info'); break
       case 'ie': this.launchIE(); break
     }
@@ -316,9 +318,9 @@ export class Desktop {
       },
       {
         label: 'Док&ументы', icon: 'icon-documents', items: [
-          { label: 'Мои документы', icon: 'icon-documents', action: () => openExplorer(DOCS) },
-          { label: 'Мои рисунки', icon: 'icon-pictures', action: () => openExplorer(DOCS + '\\Мои рисунки') },
-          { label: 'Моя музыка', icon: 'icon-music', action: () => openExplorer(DOCS + '\\Моя музыка') },
+          { label: 'Мои документы', icon: 'icon-documents', action: () => openExplorer(PATH_MY_DOCUMENTS) },
+          { label: 'Мои рисунки', icon: 'icon-pictures', action: () => openExplorer(PATH_MY_PICTURES) },
+          { label: 'Моя музыка', icon: 'icon-music', action: () => openExplorer(PATH_MY_MUSIC) },
           { separator: true },
           { label: 'report.doc', icon: 'icon-file-doc', action: () => this.stub('report.doc') },
           { label: 'notes.txt', icon: 'icon-file-text', action: () => this.stub('notes.txt') },
@@ -326,7 +328,7 @@ export class Desktop {
       },
       {
         label: '&Настройка', icon: 'icon-settings', items: [
-          { label: 'Панель управления', icon: 'icon-controlpanel', action: () => openExplorer('Мой компьютер\\Панель управления') },
+          { label: 'Панель управления', icon: 'icon-controlpanel', action: () => openExplorer(PATH_CONTROL_PANEL) },
           { label: 'Сетевые подключения', icon: 'icon-network', action: () => this.stub('Сетевые подключения') },
           { label: 'Принтеры и факсы', icon: 'icon-printer', action: () => this.stub('Принтеры и факсы') },
           { separator: true },

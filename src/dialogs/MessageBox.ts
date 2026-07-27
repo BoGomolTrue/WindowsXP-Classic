@@ -1,108 +1,96 @@
+import { escapeHtml, icon } from '../utils/helpers'
 import { windowManager } from '../windows/WindowManager'
 
 export type MessageBoxIcon = 'info' | 'warning' | 'error' | 'question'
-export type MessageBoxButton = 'ok' | 'okcancel' | 'yesno'
+export type MessageBoxButtons = 'ok' | 'okcancel' | 'yesno' | 'yesnocancel'
+
+const ICONS: Record<MessageBoxIcon, string> = {
+  info: 'msg-info',
+  warning: 'msg-warning',
+  error: 'msg-error',
+  question: 'msg-question',
+}
+
+const BUTTONS: Record<MessageBoxButtons, Array<{ value: string; label: string }>> = {
+  ok: [{ value: 'ok', label: 'OK' }],
+  okcancel: [
+    { value: 'ok', label: 'OK' },
+    { value: 'cancel', label: 'Отмена' },
+  ],
+  yesno: [
+    { value: 'yes', label: 'Да' },
+    { value: 'no', label: 'Нет' },
+  ],
+  yesnocancel: [
+    { value: 'yes', label: 'Да' },
+    { value: 'no', label: 'Нет' },
+    { value: 'cancel', label: 'Отмена' },
+  ],
+}
 
 export function showMessage(
   message: string,
-  title: string = 'Сообщение',
-  icon: MessageBoxIcon = 'info',
+  title = 'Windows',
+  kind: MessageBoxIcon = 'info',
   buttons: MessageBoxButtons = 'ok',
 ): Promise<string> {
   return new Promise((resolve) => {
     const el = document.createElement('div')
-    el.className = 'dialog messagebox'
+    el.className = 'dialog msgbox'
 
-    const iconSvg = getIconSvg(icon)
-    const btns = getButtons(buttons)
-
+    const btns = BUTTONS[buttons]
     el.innerHTML = `
-      <div class="messagebox__body">
-        <div class="messagebox__icon">${iconSvg}</div>
-        <div class="messagebox__text">${escapeHtml(message).replace(/\n/g, '<br>')}</div>
+      <div class="msgbox__body">
+        ${icon(ICONS[kind], 32, 'msgbox__icon')}
+        <div class="msgbox__text">${escapeHtml(message).replace(/\n/g, '<br>')}</div>
       </div>
-      <div class="messagebox__buttons">
-        ${btns.map((b) => `<button class="xp-btn messagebox__btn" data-value="${b.value}">${b.label}</button>`).join('')}
+      <div class="dialog__buttons">
+        ${btns.map((b, i) => `<button class="xp-btn${i === 0 ? ' xp-btn--default' : ''}" type="button" data-value="${b.value}">${b.label}</button>`).join('')}
       </div>
     `
+
+    // Ширина подбирается по самой длинной строке — как у настоящего MessageBox
+    const longest = message.split('\n').reduce((m, l) => Math.max(m, l.length), 0)
+    const width = Math.min(460, Math.max(240, Math.round(longest * 5.9) + 96))
+
+    let settled = false
+    const finish = (value: string) => {
+      if (settled) return
+      settled = true
+      resolve(value)
+    }
 
     const winId = windowManager.open({
       title,
       icon: 'icon-computer',
-      width: 380,
-      height: 180,
-      x: Math.floor(window.innerWidth / 2 - 190),
-      y: Math.floor(window.innerHeight / 2 - 120),
-      resizable: false,
-      minimizable: false,
-      maximizable: false,
+      dialog: true,
+      width,
+      height: 160,
       content: el,
-      onClose: () => resolve('close'),
+      onClose: () => finish('cancel'),
     })
 
-    el.querySelectorAll('.messagebox__btn').forEach((btn) => {
-      (btn as HTMLElement).focus()
+    el.querySelectorAll<HTMLElement>('.xp-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        resolve((btn as HTMLElement).dataset.value ?? 'ok')
+        finish(btn.dataset.value!)
         windowManager.close(winId)
       })
     })
 
-    const firstBtn = el.querySelector('.messagebox__btn') as HTMLElement
-    if (firstBtn) firstBtn.focus()
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') (el.querySelector('.xp-btn') as HTMLElement)?.click()
+      if (e.key === 'Escape') {
+        finish('cancel')
+        windowManager.close(winId)
+      }
+    })
+
+    requestAnimationFrame(() => {
+      const body = el.querySelector<HTMLElement>('.msgbox__body')!
+      const row = el.querySelector<HTMLElement>('.dialog__buttons')!
+      const height = 3 * 2 + 18 + 20 + body.offsetHeight + 12 + row.offsetHeight
+      windowManager.setSize(winId, undefined, height, true)
+      ;(el.querySelector('.xp-btn') as HTMLElement)?.focus()
+    })
   })
-}
-
-function getIconSvg(icon: MessageBoxIcon): string {
-  switch (icon) {
-    case 'info':
-      return `<svg width="32" height="32" viewBox="0 0 32 32">
-        <circle cx="16" cy="16" r="14" fill="#316ac5" stroke="#000"/>
-        <text x="16" y="23" text-anchor="middle" font-size="20" font-weight="bold" fill="#fff" font-family="Arial">i</text>
-      </svg>`
-    case 'warning':
-      return `<svg width="32" height="32" viewBox="0 0 32 32">
-        <polygon points="16,2 30,28 2,28" fill="#ffcc00" stroke="#000"/>
-        <text x="16" y="25" text-anchor="middle" font-size="20" font-weight="bold" fill="#000" font-family="Arial">!</text>
-      </svg>`
-    case 'error':
-      return `<svg width="32" height="32" viewBox="0 0 32 32">
-        <circle cx="16" cy="16" r="14" fill="#cc0000" stroke="#000"/>
-        <line x1="10" y1="10" x2="22" y2="22" stroke="#fff" stroke-width="3"/>
-        <line x1="22" y1="10" x2="10" y2="22" stroke="#fff" stroke-width="3"/>
-      </svg>`
-    case 'question':
-      return `<svg width="32" height="32" viewBox="0 0 32 32">
-        <circle cx="16" cy="16" r="14" fill="#316ac5" stroke="#000"/>
-        <text x="16" y="23" text-anchor="middle" font-size="22" font-weight="bold" fill="#fff" font-family="Arial">?</text>
-      </svg>`
-  }
-}
-
-interface BtnDef {
-  value: string
-  label: string
-}
-
-function getButtons(type: MessageBoxButtons): BtnDef[] {
-  switch (type) {
-    case 'ok':
-      return [{ value: 'ok', label: 'OK' }]
-    case 'okcancel':
-      return [
-        { value: 'ok', label: 'OK' },
-        { value: 'cancel', label: 'Отмена' },
-      ]
-    case 'yesno':
-      return [
-        { value: 'yes', label: 'Да' },
-        { value: 'no', label: 'Нет' },
-      ]
-  }
-}
-
-type MessageBoxButtons = 'ok' | 'okcancel' | 'yesno'
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }

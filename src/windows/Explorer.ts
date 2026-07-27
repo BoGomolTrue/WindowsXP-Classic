@@ -96,7 +96,7 @@ export function openExplorer(startPath: string = PATH_MY_COMPUTER): void {
     icon: node.icon ?? 'icon-folder-open',
     width: 760,
     height: 520,
-    menu: menuBar(),
+    menu: menuBar,
     content: root,
   })
 

@@ -199,6 +199,18 @@ export class WindowManager {
     this.emit()
   }
 
+  /** Подгоняет размеры окна (диалоги измеряют содержимое после вставки). */
+  setSize(id: string, w?: number, h?: number, center = false): void {
+    const win = this.windows.get(id)
+    if (!win) return
+    if (w) win.el.style.width = w + 'px'
+    if (h) win.el.style.height = h + 'px'
+    if (center) {
+      win.el.style.left = Math.max(0, Math.round((window.innerWidth - win.el.offsetWidth) / 2)) + 'px'
+      win.el.style.top = Math.max(0, Math.round((window.innerHeight - TASKBAR_H - win.el.offsetHeight) / 2)) + 'px'
+    }
+  }
+
   getWindows(): WindowInstance[] {
     return Array.from(this.windows.values())
   }
@@ -232,9 +244,9 @@ export class WindowManager {
     this.onChange?.()
   }
 
-  private buildMenuBar(win: WindowInstance, menus: WindowMenu[]): void {
+  private buildMenuBar(win: WindowInstance, provider: () => WindowMenu[]): void {
     const bar = win.el.querySelector<HTMLElement>('[data-role="menubar"]')!
-    bar.innerHTML = menus
+    bar.innerHTML = provider()
       .map((m, i) => `<div class="win__menubar-item" data-menu="${i}">${accel(m.label)}</div>`)
       .join('')
 
@@ -244,7 +256,7 @@ export class WindowManager {
       const rect = itemEl.getBoundingClientRect()
       open = index
       itemEl.classList.add('open')
-      showMenu(menus[index].items, {
+      showMenu(provider()[index].items, {
         x: rect.left,
         y: rect.bottom,
         onClose: () => {
