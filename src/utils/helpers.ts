@@ -12,6 +12,13 @@ export function installSprite(): void {
 }
 
 export function icon(id: string, size = 32, cls = ''): string {
+  if (id.startsWith('/') || /\.(webp|jpg|jpeg|gif|svg)$/i.test(id)) {
+    const src = id.startsWith('/') ? id : `/images/xp/icons/${id}`
+    return `<img class="${cls}" src="${src}" width="${size}" height="${size}" alt="" draggable="false">`
+  }
+  if (id.endsWith('.png')) {
+    return `<img class="${cls}" src="/images/xp/icons/${id}" width="${size}" height="${size}" alt="" draggable="false">`
+  }
   return `<svg class="${cls}" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><use href="#${id}"/></svg>`
 }
 

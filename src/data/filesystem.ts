@@ -1,3 +1,5 @@
+import { BOOT_INI_EGG, NOTES_EGG } from './easter-eggs'
+
 export interface FSNode {
   name: string
   type: 'folder' | 'file'
@@ -13,6 +15,9 @@ export interface FSNode {
   view?: 'drives'
   total?: string
   free?: string
+  shortcutTarget?: string
+  content?: string
+  mediaUrl?: string
 }
 
 export const SEP = '\\'
@@ -39,18 +44,22 @@ export const FILE_SYSTEM: FSNode = {
       children: [
         {
           name: 'Мои рисунки', type: 'folder', icon: 'icon-pictures', children: [
-            { name: 'Закат.jpg', type: 'file', icon: 'icon-file-jpg', size: '1 214 КБ', modified: '10.02.2005 18:22' },
-            { name: 'Обои.bmp', type: 'file', icon: 'icon-file-jpg', size: '2 304 КБ', modified: '04.11.2004 09:15' },
+            { name: 'Blue Hill.jpg', type: 'file', icon: 'icon-file-jpg', size: '22 КБ', modified: '10.02.2005 18:22', mediaUrl: '/files/blue_hill.jpg' },
+            { name: 'Sunset.jpg', type: 'file', icon: 'icon-file-jpg', size: '45 КБ', modified: '04.11.2004 09:15', mediaUrl: '/files/sunset.jpg' },
+            { name: 'Water Lily.jpg', type: 'file', icon: 'icon-file-jpg', size: '72 КБ', modified: '17.07.2005 19:55', mediaUrl: '/files/water_lily.jpg' },
+            { name: 'Winter.jpg', type: 'file', icon: 'icon-file-jpg', size: '95 КБ', modified: '22.01.2005 16:03', mediaUrl: '/files/winter.jpg' },
           ],
         },
         {
           name: 'Моя музыка', type: 'folder', icon: 'icon-music', children: [
-            { name: 'Пример.wma', type: 'file', icon: 'icon-mediaplayer', size: '862 КБ', modified: '08.08.2004 14:00' },
+            { name: "Beethoven's Symphony No. 9 (Scherzo).mp3", type: 'file', icon: 'icon-mediaplayer', size: '1 287 КБ', modified: '08.08.2004 14:00', mediaUrl: '/files/symphony_9.mp3' },
+            { name: 'New Stories (Highway Blues).mp3', type: 'file', icon: 'icon-mediaplayer', size: '1 741 КБ', modified: '12.09.2005 20:41', mediaUrl: '/files/new_stories.mp3' },
           ],
         },
-        { name: 'report.doc', type: 'file', icon: 'icon-file-doc', size: '24 КБ', modified: '15.03.2005 11:47' },
+        { name: 'report.doc', type: 'file', icon: 'icon-file-doc', size: '24 КБ', modified: '15.03.2005 11:47', content: 'Отчёт\n' },
         { name: 'budget.xls', type: 'file', icon: 'icon-file-xls', size: '58 КБ', modified: '22.01.2005 16:03' },
-        { name: 'notes.txt', type: 'file', icon: 'icon-file-text', size: '2 КБ', modified: '28.03.2005 08:12' },
+        { name: 'notes.txt', type: 'file', icon: 'icon-file-text', size: '2 КБ', modified: '28.03.2005 08:12', content: NOTES_EGG },
+        { name: 'some stuff.zip', type: 'file', icon: 'Zipfolder.png', size: '4 КБ', modified: '08.08.2004 14:00', mediaUrl: '/files/some_stuff.zip' },
       ],
     },
     {
@@ -113,7 +122,7 @@ export const FILE_SYSTEM: FSNode = {
               ],
             },
             { name: 'AUTOEXEC.BAT', type: 'file', icon: 'icon-file-text', size: '0 КБ', modified: D },
-            { name: 'boot.ini', type: 'file', icon: 'icon-file-text', size: '1 КБ', modified: D },
+            { name: 'boot.ini', type: 'file', icon: 'icon-file-text', size: '1 КБ', modified: D, content: BOOT_INI_EGG },
           ],
         },
         {
@@ -125,7 +134,9 @@ export const FILE_SYSTEM: FSNode = {
           total: '38,2 ГБ',
           free: '30,7 ГБ',
           children: [
-            { name: 'Архив', type: 'folder', modified: '12.09.2005 20:41', children: [] },
+            { name: 'Архив', type: 'folder', modified: '12.09.2005 20:41', children: [
+              { name: 'podcast_raw.avi', type: 'file', icon: 'icon-mediaplayer', size: '4,2 ГБ', modified: '12.09.2005 20:41' },
+            ] },
             { name: 'Музыка', type: 'folder', icon: 'icon-music', modified: '02.06.2005 12:10', children: [] },
             { name: 'Фото', type: 'folder', icon: 'icon-pictures', modified: '17.07.2005 19:55', children: [] },
           ],
@@ -225,9 +236,17 @@ const EXT_KINDS: Record<string, string> = {
   xls: 'Лист Microsoft Excel',
   jpg: 'Рисунок JPEG',
   bmp: 'Точечный рисунок',
+  png: 'Рисунок PNG',
+  gif: 'Рисунок GIF',
+  mp3: 'Аудиофайл MP3',
+  wav: 'Аудиофайл WAV',
   wma: 'Аудиофайл Windows Media',
   exe: 'Приложение',
   dll: 'Компонент приложения',
+  zip: 'Архив ZIP',
+  rar: 'Архив WinRAR',
+  '7z': 'Архив 7-Zip',
+  tar: 'Архив TAR',
 }
 
 export function kindOf(node: FSNode): string {

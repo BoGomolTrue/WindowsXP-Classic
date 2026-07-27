@@ -1,5 +1,7 @@
 import { accel, escapeHtml, icon } from '../utils/helpers'
 import { closeAllMenus, showMenu, type MenuItem } from '../ui/Menu'
+import { showMessage } from '../dialogs/MessageBox'
+import { playClick, playMinimize, playRestore } from '../utils/sounds'
 
 export interface WindowMenu {
   label: string
@@ -22,6 +24,8 @@ export interface WindowOptions {
   menu?: WindowMenu[] | (() => WindowMenu[])
   content: HTMLElement | string
   onClose?: () => void
+  /** Звук при закрытии окна (по умолчанию включён). */
+  closeSound?: boolean
 }
 
 export interface WindowInstance {
@@ -37,7 +41,14 @@ export interface WindowInstance {
   restoreBounds?: { x: number; y: number; w: number; h: number }
 }
 
-const TASKBAR_H = 28
+const TASKBAR_H = 30
+
+const WIN_BTN_IMG = {
+  min: '/images/xp/icons/Minimize.png',
+  max: '/images/xp/icons/Maximize.png',
+  restore: '/images/xp/icons/Restore.png',
+  close: '/images/xp/icons/Exit.png',
+}
 const MIN_W = 120
 const MIN_H = 60
 
@@ -77,9 +88,9 @@ export class WindowManager {
         ${opts.icon ? icon(opts.icon, 16, 'win__caption-icon') : ''}
         <span class="win__caption-text">${escapeHtml(opts.title)}</span>
         <div class="win__caption-btns">
-          ${minimizable ? '<button class="win__btn win__btn--min" data-role="minimize" title="Свернуть"></button>' : ''}
-          ${maximizable ? '<button class="win__btn win__btn--max" data-role="maximize" title="Развернуть"></button>' : ''}
-          <button class="win__btn win__btn--close win__btn--close-glyph" data-role="close" title="Закрыть"></button>
+          ${minimizable ? `<button class="win__btn win__btn--min" data-role="minimize" title="Свернуть"><img src="${WIN_BTN_IMG.min}" alt=""></button>` : ''}
+          ${maximizable ? `<button class="win__btn win__btn--max" data-role="maximize" title="Развернуть"><img src="${WIN_BTN_IMG.max}" alt=""></button>` : ''}
+          <button class="win__btn win__btn--close" data-role="close" title="Закрыть"><img src="${WIN_BTN_IMG.close}" alt=""></button>
         </div>
       </div>
       ${opts.menu ? '<div class="win__menubar" data-role="menubar"></div>' : ''}
@@ -120,6 +131,7 @@ export class WindowManager {
   close(id: string): void {
     const win = this.windows.get(id)
     if (!win) return
+    if (win.options.closeSound !== false) playClick()
     win.options.onClose?.()
     win.el.remove()
     this.windows.delete(id)
@@ -133,6 +145,7 @@ export class WindowManager {
   minimize(id: string): void {
     const win = this.windows.get(id)
     if (!win) return
+    playMinimize()
     win.minimized = true
     win.el.style.display = 'none'
     if (this.activeId === id) {
@@ -145,6 +158,7 @@ export class WindowManager {
   restore(id: string): void {
     const win = this.windows.get(id)
     if (!win) return
+    playRestore()
     win.minimized = false
     win.el.style.display = ''
     this.focus(id)
@@ -164,6 +178,8 @@ export class WindowManager {
         win.el.style.height = b.h + 'px'
       }
       win.maxBtn.className = 'win__btn win__btn--max'
+      const maxImg = win.maxBtn.querySelector('img')
+      if (maxImg) maxImg.src = WIN_BTN_IMG.max
       win.maxBtn.title = 'Развернуть'
     } else {
       win.restoreBounds = {
@@ -178,6 +194,8 @@ export class WindowManager {
       win.el.style.width = '100%'
       win.el.style.height = `calc(100% - ${TASKBAR_H}px)`
       win.maxBtn.className = 'win__btn win__btn--restore'
+      const maxImg = win.maxBtn.querySelector('img')
+      if (maxImg) maxImg.src = WIN_BTN_IMG.restore
       win.maxBtn.title = 'Восстановить'
     }
   }
@@ -223,6 +241,84 @@ export class WindowManager {
     this.windows.forEach((w) => {
       if (!w.minimized) this.minimize(w.id)
     })
+  }
+
+  cascadeWindows(): void {
+    const visible = this.getWindows().filter((w) => !w.minimized && !w.options.dialog)
+    visible.forEach((win, index) => {
+      if (win.maximized) this.toggleMaximize(win.id)
+      const w = win.options.width ?? 640
+      const h = win.options.height ?? 480
+      win.el.style.left = `${24 + index * 28}px`
+      win.el.style.top = `${24 + index * 28}px`
+      win.el.style.width = `${w}px`
+      win.el.style.height = `${h}px`
+      this.focus(win.id)
+    })
+  }
+
+  tileWindowsHorizontal(): void {
+    const visible = this.getWindows().filter((w) => !w.minimized && !w.options.dialog)
+    if (!visible.length) return
+    const h = Math.max(MIN_H, Math.floor((window.innerHeight - TASKBAR_H) / visible.length))
+    visible.forEach((win, index) => {
+      if (win.maximized) this.toggleMaximize(win.id)
+      win.el.style.left = '0px'
+      win.el.style.top = `${index * h}px`
+      win.el.style.width = '100%'
+      win.el.style.height = `${h}px`
+    })
+  }
+
+  tileWindowsVertical(): void {
+    const visible = this.getWindows().filter((w) => !w.minimized && !w.options.dialog)
+    if (!visible.length) return
+    const w = Math.max(MIN_W, Math.floor(window.innerWidth / visible.length))
+    visible.forEach((win, index) => {
+      if (win.maximized) this.toggleMaximize(win.id)
+      win.el.style.left = `${index * w}px`
+      win.el.style.top = '0px'
+      win.el.style.width = `${w}px`
+      win.el.style.height = `calc(100% - ${TASKBAR_H}px)`
+    })
+  }
+
+  startKeyboardMove(id: string): void {
+    const win = this.windows.get(id)
+    if (!win || win.maximized) return
+    void showMessage('Используйте клавиши со стрелками для перемещения окна.\nEnter — завершить, Esc — отмена.', win.options.title, 'info')
+    const step = () => 8
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { document.removeEventListener('keydown', onKey); return }
+      if (e.key === 'Enter') { document.removeEventListener('keydown', onKey); return }
+      let x = win.el.offsetLeft
+      let y = win.el.offsetTop
+      if (e.key === 'ArrowLeft') x -= step()
+      if (e.key === 'ArrowRight') x += step()
+      if (e.key === 'ArrowUp') y = Math.max(0, y - step())
+      if (e.key === 'ArrowDown') y += step()
+      win.el.style.left = `${x}px`
+      win.el.style.top = `${y}px`
+    }
+    document.addEventListener('keydown', onKey)
+  }
+
+  startKeyboardResize(id: string): void {
+    const win = this.windows.get(id)
+    if (!win || win.maximized) return
+    void showMessage('Используйте клавиши со стрелками для изменения размера.\nEnter — завершить, Esc — отмена.', win.options.title, 'info')
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter') { document.removeEventListener('keydown', onKey); return }
+      let w = win.el.offsetWidth
+      let h = win.el.offsetHeight
+      if (e.key === 'ArrowRight') w += 8
+      if (e.key === 'ArrowLeft') w = Math.max(MIN_W, w - 8)
+      if (e.key === 'ArrowDown') h += 8
+      if (e.key === 'ArrowUp') h = Math.max(MIN_H, h - 8)
+      win.el.style.width = `${w}px`
+      win.el.style.height = `${h}px`
+    }
+    document.addEventListener('keydown', onKey)
   }
 
   private focusTopMost(): void {
@@ -297,8 +393,8 @@ export class WindowManager {
   private systemMenu(win: WindowInstance): MenuItem[] {
     return [
       { label: '&Восстановить', disabled: !win.maximized, action: () => this.toggleMaximize(win.id) },
-      { label: 'Пере&местить', disabled: true },
-      { label: '&Размер', disabled: true },
+      { label: 'Пере&местить', action: () => this.startKeyboardMove(win.id) },
+      { label: '&Размер', action: () => this.startKeyboardResize(win.id) },
       { label: 'Сверн&уть', disabled: !win.maxBtn && !win.options.minimizable, action: () => this.minimize(win.id) },
       { label: 'Развер&нуть', disabled: !win.maxBtn || win.maximized, action: () => this.toggleMaximize(win.id) },
       { separator: true },
@@ -317,6 +413,7 @@ export class WindowManager {
       btn.addEventListener('click', (e) => {
         e.stopPropagation()
         const role = btn.dataset.role
+        if (role !== 'close') playClick()
         if (role === 'close') this.close(win.id)
         else if (role === 'minimize') this.minimize(win.id)
         else if (role === 'maximize') this.toggleMaximize(win.id)

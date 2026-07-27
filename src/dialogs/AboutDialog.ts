@@ -1,4 +1,5 @@
 import { USER_NAME } from '../data/icons'
+import { showToast } from '../data/easter-eggs'
 import { icon } from '../utils/helpers'
 import { windowManager } from '../windows/WindowManager'
 
@@ -38,6 +39,19 @@ export function showAbout(): void {
     width: 424,
     height: 272,
     content: el,
+  })
+
+  const logo = el.querySelector('.about__logo')!
+  let clicks = 0
+  let resetTimer = 0
+  logo.addEventListener('click', () => {
+    clicks += 1
+    window.clearTimeout(resetTimer)
+    resetTimer = window.setTimeout(() => { clicks = 0 }, 600)
+    if (clicks >= 3) {
+      clicks = 0
+      showToast('Shorts из длинного видео — в Telegram')
+    }
   })
 
   el.querySelector('[data-role="ok"]')!.addEventListener('click', () => windowManager.close(winId))
