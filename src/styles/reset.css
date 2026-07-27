@@ -1,0 +1,53 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+body {
+  font-family: Tahoma, "MS Sans Serif", "Segoe UI", sans-serif;
+  font-size: 11px;
+  -webkit-text-size-adjust: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: default;
+  line-height: normal;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+input {
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+svg {
+  display: block;
+  pointer-events: none;
+}
+
+ul {
+  list-style: none;
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1200" viewBox="0 0 1920 1200">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e5799"/>
+      <stop offset="35%" stop-color="#2989d8"/>
+      <stop offset="70%" stop-color="#7db9e8"/>
+      <stop offset="100%" stop-color="#b8daf0"/>
+    </linearGradient>
+    <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6aab3c"/>
+      <stop offset="100%" stop-color="#4a8a2a"/>
+    </linearGradient>
+    <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8ecf55"/>
+      <stop offset="100%" stop-color="#6db040"/>
+    </linearGradient>
+    <linearGradient id="hill3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8e068"/>
+      <stop offset="100%" stop-color="#88cc48"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1200" fill="url(#sky)"/>
+  <path d="M0 720 Q480 640 960 680 Q1440 720 1920 660 L1920 1200 L0 1200Z" fill="url(#hill1)"/>
+  <path d="M0 820 Q640 740 1100 780 Q1500 820 1920 760 L1920 1200 L0 1200Z" fill="url(#hill2)"/>
+  <path d="M0 920 Q400 860 800 880 Q1200 900 1920 840 L1920 1200 L0 1200Z" fill="url(#hill3)"/>
+  <ellipse cx="300" cy="950" rx="400" ry="80" fill="#b8e870" opacity="0.35"/>
+  <ellipse cx="1600" cy="900" rx="350" ry="70" fill="#c8f080" opacity="0.3"/>
+</svg>

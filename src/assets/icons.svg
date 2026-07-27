@@ -1,0 +1,443 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7fb4e8"/>
+      <stop offset="45%" stop-color="#2f6ab5"/>
+      <stop offset="100%" stop-color="#123a72"/>
+    </linearGradient>
+    <linearGradient id="g-plastic" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbfaf6"/>
+      <stop offset="35%" stop-color="#ddd9cd"/>
+      <stop offset="100%" stop-color="#a9a495"/>
+    </linearGradient>
+    <linearGradient id="g-plastic2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#efece2"/>
+      <stop offset="60%" stop-color="#cdc8b8"/>
+      <stop offset="100%" stop-color="#9d9788"/>
+    </linearGradient>
+    <linearGradient id="g-folder" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe9a8"/>
+      <stop offset="45%" stop-color="#fdd062"/>
+      <stop offset="100%" stop-color="#e8a32b"/>
+    </linearGradient>
+    <linearGradient id="g-folder-back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbd06a"/>
+      <stop offset="100%" stop-color="#dd9a24"/>
+    </linearGradient>
+    <linearGradient id="g-paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e2e2"/>
+    </linearGradient>
+    <linearGradient id="g-globe" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a8e0ff"/>
+      <stop offset="45%" stop-color="#2f8fd8"/>
+      <stop offset="100%" stop-color="#0d4a86"/>
+    </linearGradient>
+    <linearGradient id="g-bin" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e9edf2"/>
+      <stop offset="35%" stop-color="#b9c3ce"/>
+      <stop offset="75%" stop-color="#8d99a8"/>
+      <stop offset="100%" stop-color="#c6cfd9"/>
+    </linearGradient>
+    <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe680"/>
+      <stop offset="50%" stop-color="#f2b62c"/>
+      <stop offset="100%" stop-color="#b97c0a"/>
+    </linearGradient>
+    <linearGradient id="g-steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f2f4f7"/>
+      <stop offset="40%" stop-color="#b6bcc6"/>
+      <stop offset="60%" stop-color="#8d95a2"/>
+      <stop offset="100%" stop-color="#d8dce2"/>
+    </linearGradient>
+    <linearGradient id="g-green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9be86b"/>
+      <stop offset="50%" stop-color="#3faa1c"/>
+      <stop offset="100%" stop-color="#1d6e08"/>
+    </linearGradient>
+    <linearGradient id="g-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff9a8a"/>
+      <stop offset="45%" stop-color="#e02a15"/>
+      <stop offset="100%" stop-color="#8d0f03"/>
+    </linearGradient>
+
+    <!-- Синяя заливка выделенного значка (как на рабочем столе XP) -->
+    <filter id="xp-icon-select" x="-10%" y="-10%" width="120%" height="120%">
+      <feFlood flood-color="#0a246a" flood-opacity="0.45" result="f"/>
+      <feComposite in="f" in2="SourceAlpha" operator="in" result="tint"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="tint"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ══════════ Оболочка, 32×32 ══════════ -->
+
+  <symbol id="icon-computer" viewBox="0 0 32 32">
+    <path d="M3 8h7v17H3z" fill="url(#g-plastic2)" stroke="#6f6a5c" stroke-width=".6"/>
+    <rect x="4.4" y="9.6" width="4.2" height="1.1" fill="#8b8577"/>
+    <rect x="4.4" y="11.4" width="4.2" height="1.1" fill="#8b8577"/>
+    <circle cx="6.5" cy="22" r="1" fill="#5fdc4a"/>
+    <rect x="8" y="10" width="22" height="16" rx="1.6" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="10" y="12" width="18" height="11.5" rx=".6" fill="url(#g-screen)" stroke="#20416e" stroke-width=".7"/>
+    <path d="M10.6 22.9 26 12.6h1.8L11.6 22.9z" fill="#ffffff" opacity=".22"/>
+    <rect x="16" y="26" width="6" height="2.4" fill="#b4af9f"/>
+    <rect x="12" y="28" width="14" height="2.2" rx="1" fill="url(#g-plastic2)" stroke="#6f6a5c" stroke-width=".6"/>
+  </symbol>
+
+  <symbol id="icon-folder" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M3 13.8h25.6l-.35 1.8H3.1z" fill="#fff" opacity=".45"/>
+  </symbol>
+
+  <symbol id="icon-folder-open" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h11.6a1 1 0 0 1 1 1v4.4H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M5.6 14h26.2l-4.2 11.8a1.4 1.4 0 0 1-1.3.9H2.4a1 1 0 0 1-.95-1.3z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7"/>
+  </symbol>
+
+  <symbol id="icon-documents" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M9 9h12v14H9z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".7"/>
+    <g fill="#7f9dc0">
+      <rect x="11" y="12" width="8" height="1.2"/>
+      <rect x="11" y="15" width="8" height="1.2"/>
+      <rect x="11" y="18" width="5.5" height="1.2"/>
+    </g>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7" opacity=".93"/>
+    <path d="M3 13.8h25.6l-.35 1.8H3.1z" fill="#fff" opacity=".45"/>
+  </symbol>
+
+  <symbol id="icon-pictures" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <rect x="9" y="8.5" width="13" height="10" fill="#fff" stroke="#8d8d8d" stroke-width=".7"/>
+    <rect x="10" y="9.5" width="11" height="8" fill="#8ec6f0"/>
+    <circle cx="13" cy="12" r="1.4" fill="#ffe98a"/>
+    <path d="M10 17.5 14 13l3 3 2.5-2.2 1.5 1.6v2.1z" fill="#4a9a3a"/>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7" opacity=".93"/>
+  </symbol>
+
+  <symbol id="icon-music" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <g fill="#2a4b8d">
+      <rect x="14" y="6" width="1.6" height="11"/>
+      <rect x="21" y="5" width="1.6" height="11"/>
+      <path d="M14 6h8.6v2.4H14z"/>
+      <ellipse cx="12.4" cy="17" rx="2.6" ry="2"/>
+      <ellipse cx="19.4" cy="16" rx="2.6" ry="2"/>
+    </g>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7" opacity=".93"/>
+  </symbol>
+
+  <symbol id="icon-recycle" viewBox="0 0 32 32">
+    <path d="M8 9h16l-1.6 19.5a1.4 1.4 0 0 1-1.4 1.3H11a1.4 1.4 0 0 1-1.4-1.3z" fill="url(#g-bin)" stroke="#66717f" stroke-width=".7"/>
+    <ellipse cx="16" cy="9" rx="8" ry="2.4" fill="#dfe5ec" stroke="#66717f" stroke-width=".7"/>
+    <ellipse cx="16" cy="9" rx="5.6" ry="1.5" fill="#8f9aa8" opacity=".55"/>
+    <g stroke="#7a8593" stroke-width=".8" opacity=".8">
+      <path d="M12.6 13.5 12 27"/><path d="M16 13.6 16 27"/><path d="M19.4 13.5 20 27"/>
+    </g>
+    <g fill="#2f9c1f" opacity=".92">
+      <path d="M16 15.5l2.2 3.8h-4.4z"/>
+      <path d="M20.4 22.6l-2.2 3.8-2.2-3.8z" transform="rotate(120 17.6 23.6)"/>
+      <path d="M13.8 22.6l-2.2 3.8-2.2-3.8z" transform="rotate(-120 12.4 23.6)"/>
+    </g>
+  </symbol>
+
+  <symbol id="icon-network" viewBox="0 0 32 32">
+    <circle cx="18" cy="13" r="10" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".7"/>
+    <g fill="none" stroke="#cfeaff" stroke-width=".8" opacity=".85">
+      <ellipse cx="18" cy="13" rx="4.4" ry="10"/>
+      <path d="M8.4 10h19.2M8.4 16h19.2"/>
+    </g>
+    <path d="M12 6.5a10 10 0 0 1 9 1.5" fill="none" stroke="#fff" stroke-width="1.2" opacity=".5"/>
+    <rect x="3" y="17" width="15" height="10" rx="1" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="4.4" y="18.4" width="12.2" height="7" fill="url(#g-screen)" stroke="#20416e" stroke-width=".6"/>
+    <rect x="8" y="27" width="5" height="1.6" fill="#b4af9f"/>
+    <rect x="5.5" y="28.6" width="10" height="1.6" rx=".8" fill="url(#g-plastic2)" stroke="#6f6a5c" stroke-width=".5"/>
+  </symbol>
+
+  <symbol id="icon-ie" viewBox="0 0 32 32">
+    <ellipse cx="16" cy="16.5" rx="15" ry="6.2" transform="rotate(-24 16 16.5)" fill="none" stroke="url(#g-gold)" stroke-width="3.4"/>
+    <path d="M16 4.5c6.2 0 11 4.6 11 10.6 0 1-.1 1.8-.3 2.6H11.8c.3 2.9 2.3 4.6 4.9 4.6 1.9 0 3.3-.8 4.2-2.3l5 1.6C24.2 24.6 20.7 27 16 27 9.6 27 5 22.2 5 15.9 5 9.4 9.7 4.5 16 4.5zm0 4.3c-2.4 0-4 1.5-4.3 4h8.5c-.2-2.5-1.8-4-4.2-4z" fill="#1163b8"/>
+    <path d="M16 4.5c6.2 0 11 4.6 11 10.6 0 .5 0 1-.1 1.4-.9-6-5.4-9.6-10.9-9.6-5.4 0-9.6 3.3-10.8 8.5C6 9.5 10.3 4.5 16 4.5z" fill="#6fb6f0" opacity=".9"/>
+  </symbol>
+
+  <symbol id="icon-drive" viewBox="0 0 32 32">
+    <path d="M3 12h26v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <path d="M5 6h22a2 2 0 0 1 2 2v4H3V8a2 2 0 0 1 2-2z" fill="url(#g-steel)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="6" y="14.5" width="20" height="1.4" fill="#c9c4b4"/>
+    <rect x="6" y="17.5" width="20" height="1.4" fill="#c9c4b4"/>
+    <circle cx="25.5" cy="23" r="1.2" fill="#5fdc4a"/>
+    <rect x="6" y="21.6" width="9" height="2.8" fill="#e7e3d7" stroke="#a8a394" stroke-width=".5"/>
+  </symbol>
+
+  <symbol id="icon-cdrom" viewBox="0 0 32 32">
+    <path d="M3 12h26v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <path d="M5 6h22a2 2 0 0 1 2 2v4H3V8a2 2 0 0 1 2-2z" fill="url(#g-steel)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="6" y="15" width="20" height="3" rx=".6" fill="#8e897a" stroke="#6f6a5c" stroke-width=".5"/>
+    <circle cx="16" cy="22.5" r="4.2" fill="#dfe9f5" stroke="#7f8a99" stroke-width=".6"/>
+    <circle cx="16" cy="22.5" r="1.2" fill="#f5f8fc" stroke="#7f8a99" stroke-width=".5"/>
+    <path d="M13.2 19.7a4 4 0 0 1 4.6-.8l-1 1.6a2.2 2.2 0 0 0-2.4.4z" fill="#9ed0f5"/>
+  </symbol>
+
+  <symbol id="icon-file" viewBox="0 0 32 32">
+    <path d="M7 3h12l6 6v20H7z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M19 3v6h6" fill="#d4d4d4" stroke="#8d8d8d" stroke-width=".8"/>
+  </symbol>
+
+  <symbol id="icon-file-text" viewBox="0 0 32 32">
+    <path d="M7 3h12l6 6v20H7z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M19 3v6h6" fill="#d4d4d4" stroke="#8d8d8d" stroke-width=".8"/>
+    <g fill="#7f9dc0">
+      <rect x="10" y="13" width="12" height="1.2"/>
+      <rect x="10" y="16" width="12" height="1.2"/>
+      <rect x="10" y="19" width="12" height="1.2"/>
+      <rect x="10" y="22" width="7" height="1.2"/>
+    </g>
+  </symbol>
+
+  <symbol id="icon-file-doc" viewBox="0 0 32 32">
+    <path d="M7 3h12l6 6v20H7z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M19 3v6h6" fill="#d4d4d4" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M9 17h14v10H9z" fill="#2b579a"/>
+    <text x="16" y="25.4" text-anchor="middle" font-family="Tahoma,Arial" font-size="9" font-weight="bold" fill="#fff">W</text>
+  </symbol>
+
+  <symbol id="icon-file-xls" viewBox="0 0 32 32">
+    <path d="M7 3h12l6 6v20H7z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M19 3v6h6" fill="#d4d4d4" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M9 17h14v10H9z" fill="#1e7145"/>
+    <text x="16" y="25.4" text-anchor="middle" font-family="Tahoma,Arial" font-size="9" font-weight="bold" fill="#fff">X</text>
+  </symbol>
+
+  <symbol id="icon-file-jpg" viewBox="0 0 32 32">
+    <path d="M4 6h24v20H4z" fill="#fff" stroke="#8d8d8d" stroke-width=".8"/>
+    <rect x="5.5" y="7.5" width="21" height="17" fill="#8ec6f0"/>
+    <circle cx="11" cy="12" r="2.2" fill="#ffe98a"/>
+    <path d="M5.5 24.5 13 15l5 5.4 4-3.6 4.5 4.6v3.1z" fill="#4a9a3a"/>
+  </symbol>
+
+  <symbol id="icon-file-exe" viewBox="0 0 32 32">
+    <rect x="4" y="7" width="24" height="18" rx="1" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="4" y="7" width="24" height="4" rx="1" fill="#1c4d95"/>
+    <rect x="6" y="13" width="20" height="10" fill="#fff" stroke="#a9a495" stroke-width=".5"/>
+    <path d="M11 15.5h10M11 18h10M11 20.5h6" stroke="#8fa8c8" stroke-width="1"/>
+  </symbol>
+
+  <symbol id="icon-controlpanel" viewBox="0 0 32 32">
+    <rect x="3" y="7" width="26" height="19" rx="1.4" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="5" y="9" width="22" height="15" fill="#eceadf" stroke="#a9a495" stroke-width=".5"/>
+    <circle cx="11" cy="14" r="3.4" fill="url(#g-steel)" stroke="#6f6a5c" stroke-width=".6"/>
+    <path d="M11 11.4v2.6l1.8 1.4" stroke="#33383f" stroke-width="1" fill="none"/>
+    <rect x="16.5" y="11.5" width="9" height="2.4" rx="1.2" fill="#9fb6d4"/>
+    <circle cx="23" cy="12.7" r="1.6" fill="#e8e5da" stroke="#6f6a5c" stroke-width=".5"/>
+    <rect x="7" y="19" width="18" height="2.4" rx="1.2" fill="#9fb6d4"/>
+    <circle cx="12" cy="20.2" r="1.6" fill="#e8e5da" stroke="#6f6a5c" stroke-width=".5"/>
+  </symbol>
+
+  <symbol id="icon-printer" viewBox="0 0 32 32">
+    <path d="M8 5h16v8H8z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".7"/>
+    <rect x="4" y="12" width="24" height="10" rx="1.4" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="6" y="14.5" width="4" height="1.6" fill="#8b8577"/>
+    <circle cx="25" cy="15.5" r="1.1" fill="#5fdc4a"/>
+    <path d="M9 20h14v7H9z" fill="#fff" stroke="#8d8d8d" stroke-width=".7"/>
+    <g fill="#8fa8c8"><rect x="11" y="22" width="10" height="1"/><rect x="11" y="24" width="10" height="1"/></g>
+  </symbol>
+
+  <!-- ══════════ Меню «Пуск», 32×32 ══════════ -->
+
+  <symbol id="icon-programs" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <rect x="16" y="7" width="13" height="10" rx="1" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".6"/>
+    <rect x="16" y="7" width="13" height="2.6" rx="1" fill="#1c4d95"/>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7" opacity=".93"/>
+  </symbol>
+
+  <symbol id="icon-settings" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <circle cx="21" cy="11" r="5" fill="url(#g-steel)" stroke="#6f6a5c" stroke-width=".7"/>
+    <circle cx="21" cy="11" r="1.8" fill="#7d8794"/>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7" opacity=".93"/>
+  </symbol>
+
+  <symbol id="icon-find" viewBox="0 0 32 32">
+    <path d="M2 8.5a1 1 0 0 1 1-1h9l2.4 2.6h14.6a1 1 0 0 1 1 1v3H2z" fill="url(#g-folder-back)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M2 12.5h28l-2.6 13.2a1.2 1.2 0 0 1-1.2 1H3.2a1.2 1.2 0 0 1-1.2-1.2z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7"/>
+    <circle cx="19" cy="15" r="6" fill="#cfe8ff" fill-opacity=".75" stroke="#3a6ea5" stroke-width="2"/>
+    <path d="M14.6 19.6 8.6 25.6" stroke="#33383f" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="icon-help" viewBox="0 0 32 32">
+    <path d="M5 5h9c1.4 0 2 .8 2 2v20c0-1-.8-1.6-2-1.6H5z" fill="#2f6ab5" stroke="#123a72" stroke-width=".7"/>
+    <path d="M27 5h-9c-1.4 0-2 .8-2 2v20c0-1 .8-1.6 2-1.6h9z" fill="#4f8fdb" stroke="#123a72" stroke-width=".7"/>
+    <text x="21" y="20" text-anchor="middle" font-family="Tahoma,Arial" font-size="13" font-weight="bold" fill="#ffe680">?</text>
+  </symbol>
+
+  <symbol id="icon-run" viewBox="0 0 32 32">
+    <rect x="3" y="8" width="26" height="17" rx="1" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <rect x="3" y="8" width="26" height="4" rx="1" fill="#1c4d95"/>
+    <rect x="6" y="15" width="20" height="6" fill="#fff" stroke="#8d8d8d" stroke-width=".6"/>
+    <path d="M9 18h9" stroke="#5b6875" stroke-width="1.2"/>
+    <path d="M19.5 14.5 25 18l-5.5 3.5z" fill="#2f9c1f" stroke="#175f0d" stroke-width=".5"/>
+  </symbol>
+
+  <symbol id="icon-logoff" viewBox="0 0 32 32">
+    <path d="M17 5h10v22H17z" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <circle cx="19" cy="16" r="1.1" fill="#8b8577"/>
+    <circle cx="11" cy="11" r="4.6" fill="#f6c99a" stroke="#a97c4c" stroke-width=".7"/>
+    <path d="M3.5 27c0-5.2 3.4-8 7.5-8s7.5 2.8 7.5 8z" fill="#2f6ab5" stroke="#123a72" stroke-width=".7"/>
+  </symbol>
+
+  <symbol id="icon-shutdown" viewBox="0 0 32 32">
+    <circle cx="16" cy="17" r="11" fill="url(#g-red)" stroke="#7a0d03" stroke-width=".8"/>
+    <circle cx="16" cy="17" r="8" fill="none" stroke="#ffd9d2" stroke-width="1" opacity=".5"/>
+    <rect x="14.6" y="7.5" width="2.8" height="10" rx="1.4" fill="#fff" stroke="#7a0d03" stroke-width=".6"/>
+    <path d="M9.5 12.5a9 9 0 1 0 13 0" fill="none" stroke="#fff" stroke-width="2.6"/>
+  </symbol>
+
+  <symbol id="icon-winupdate" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="11" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".7"/>
+    <g fill="none" stroke="#cfeaff" stroke-width=".8" opacity=".85">
+      <ellipse cx="16" cy="16" rx="4.8" ry="11"/>
+      <path d="M5.2 12.6h21.6M5.2 19.4h21.6"/>
+    </g>
+    <path d="M18 20v-6h4l-6-7-6 7h4v6z" fill="#ffe680" stroke="#a8790a" stroke-width=".7" transform="translate(6 6) scale(.62)"/>
+    <path d="M20 27v-5h3.6l-5.6-6-5.6 6H16v5z" fill="#5fdc4a" stroke="#1d6e08" stroke-width=".7"/>
+  </symbol>
+
+  <symbol id="icon-catalog" viewBox="0 0 32 32">
+    <path d="M6 4h20a1 1 0 0 1 1 1v22a1 1 0 0 1-1 1H6z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M4 4h3v24H4z" fill="#c23a2b" stroke="#7a1f14" stroke-width=".7"/>
+    <g fill="#8fa8c8"><rect x="10" y="10" width="13" height="1.4"/><rect x="10" y="14" width="13" height="1.4"/><rect x="10" y="18" width="9" height="1.4"/></g>
+  </symbol>
+
+  <symbol id="icon-outlook" viewBox="0 0 32 32">
+    <path d="M3 8h26v17H3z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M3 8h26L16 18.5z" fill="#e6e6e6" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M3 25 12 16M29 25 20 16" stroke="#8d8d8d" stroke-width=".8" fill="none"/>
+    <circle cx="24" cy="20" r="6.5" fill="#1c4d95" stroke="#0d2b57" stroke-width=".7"/>
+    <ellipse cx="24" cy="20" rx="2.6" ry="3.6" fill="#fff"/>
+  </symbol>
+
+  <symbol id="icon-mediaplayer" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="12" fill="url(#g-plastic)" stroke="#6f6a5c" stroke-width=".7"/>
+    <circle cx="16" cy="16" r="9.4" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".6"/>
+    <path d="M13 11.2 22 16l-9 4.8z" fill="#ff9a2e" stroke="#a85a08" stroke-width=".5"/>
+  </symbol>
+
+  <symbol id="icon-messenger" viewBox="0 0 32 32">
+    <circle cx="12" cy="12" r="7" fill="#5fdc4a" stroke="#1d6e08" stroke-width=".8"/>
+    <circle cx="12" cy="9.6" r="2.4" fill="#fff"/>
+    <path d="M7.6 17c0-3 2-4.4 4.4-4.4s4.4 1.4 4.4 4.4z" fill="#fff"/>
+    <path d="M14 17h15a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-9l-4 3.4V27h-2a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z" fill="#fff" stroke="#5b6875" stroke-width=".8"/>
+    <g fill="#7f9dc0"><rect x="16" y="20" width="11" height="1.3"/><rect x="16" y="23" width="8" height="1.3"/></g>
+  </symbol>
+
+  <symbol id="icon-notepad" viewBox="0 0 32 32">
+    <path d="M7 3h12l6 6v20H7z" fill="url(#g-paper)" stroke="#8d8d8d" stroke-width=".8"/>
+    <path d="M19 3v6h6" fill="#d4d4d4" stroke="#8d8d8d" stroke-width=".8"/>
+    <rect x="7" y="3" width="3" height="26" fill="#9fb6d4" opacity=".5"/>
+    <g fill="#7f9dc0">
+      <rect x="12" y="13" width="10" height="1.2"/>
+      <rect x="12" y="16" width="10" height="1.2"/>
+      <rect x="12" y="19" width="6" height="1.2"/>
+    </g>
+  </symbol>
+
+  <!-- ══════════ Панель инструментов, 24×24 ══════════ -->
+
+  <symbol id="tb-back" viewBox="0 0 24 24">
+    <path d="M11 4 3 12l8 8v-4.6h3.5c3 0 4.8 1.2 6 3.6.4-6.6-2.6-10.2-9.5-10.2V4z" fill="url(#g-green)" stroke="#12520a" stroke-width=".8" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="tb-forward" viewBox="0 0 24 24">
+    <path d="M13 4l8 8-8 8v-4.6H9.5c-3 0-4.8 1.2-6 3.6-.4-6.6 2.6-10.2 9.5-10.2V4z" fill="url(#g-green)" stroke="#12520a" stroke-width=".8" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="tb-up" viewBox="0 0 24 24">
+    <path d="M2 8.5a.8.8 0 0 1 .8-.8h6.4l1.8 2h10.2a.8.8 0 0 1 .8.8V19a.8.8 0 0 1-.8.8H2.8A.8.8 0 0 1 2 19z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M12 4 7 10h3.2v6h3.6v-6H17z" fill="url(#g-green)" stroke="#12520a" stroke-width=".8" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="tb-search" viewBox="0 0 24 24">
+    <circle cx="14" cy="9.5" r="6.6" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".7"/>
+    <g fill="none" stroke="#cfeaff" stroke-width=".7" opacity=".8">
+      <ellipse cx="14" cy="9.5" rx="2.8" ry="6.6"/><path d="M7.6 7.4h12.8M7.6 11.6h12.8"/>
+    </g>
+    <circle cx="9" cy="13" r="6" fill="#cfe8ff" fill-opacity=".55" stroke="#5b6875" stroke-width="1.6"/>
+    <path d="M5.2 17.2 2 20.4" stroke="#33383f" stroke-width="2.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="tb-folders" viewBox="0 0 24 24">
+    <path d="M2 6.5a.8.8 0 0 1 .8-.8h5.4l1.6 1.8h5.4a.8.8 0 0 1 .8.8v8.4a.8.8 0 0 1-.8.8H2.8a.8.8 0 0 1-.8-.8z" fill="url(#g-folder)" stroke="#b57d17" stroke-width=".7"/>
+    <path d="M12 12h9M12 16h9M12 8h9" stroke="#5b6875" stroke-width="1.2"/>
+    <rect x="17" y="4" width="5" height="5" fill="#fff" stroke="#5b6875" stroke-width=".8"/>
+  </symbol>
+  <symbol id="tb-views" viewBox="0 0 24 24">
+    <rect x="2" y="4" width="8" height="6" fill="#dfe9f5" stroke="#5b6875" stroke-width=".8"/>
+    <rect x="2" y="13" width="8" height="6" fill="#dfe9f5" stroke="#5b6875" stroke-width=".8"/>
+    <g fill="#5b6875"><rect x="12" y="5" width="10" height="1.4"/><rect x="12" y="8" width="10" height="1.4"/><rect x="12" y="14" width="10" height="1.4"/><rect x="12" y="17" width="10" height="1.4"/></g>
+  </symbol>
+  <symbol id="tb-go" viewBox="0 0 16 16">
+    <circle cx="8" cy="8" r="7" fill="url(#g-green)" stroke="#12520a" stroke-width=".8"/>
+    <path d="M6 4.5 10.5 8 6 11.5z" fill="#fff"/>
+  </symbol>
+
+  <!-- ══════════ Панель задач, 16×16 ══════════ -->
+
+  <symbol id="icon-start-flag" viewBox="0 0 16 16">
+    <path d="M1.4 3.2 7.2 1.9v5.3L1.4 8.1z" fill="#f14a3a"/>
+    <path d="M8.2 1.7 15 .5v6.5l-6.8.2z" fill="#7fc242"/>
+    <path d="M1.4 8.9 7.2 8.7v5.2L1.4 12.8z" fill="#3d8ee0"/>
+    <path d="M8.2 8.6 15 8.4V15l-6.8-1.2z" fill="#ffc224"/>
+  </symbol>
+
+  <symbol id="icon-showdesktop" viewBox="0 0 16 16">
+    <rect x="1" y="2" width="12" height="9" rx=".6" fill="#3a6ea5" stroke="#33383f" stroke-width=".7"/>
+    <rect x="5" y="11" width="4" height="1.4" fill="#8b8577"/>
+    <rect x="3" y="12.4" width="8" height="1.4" rx=".7" fill="#d9d5cb" stroke="#33383f" stroke-width=".6"/>
+    <path d="M10 5.5 15 5.5M12.5 3v5" stroke="#ffc224" stroke-width="1.4"/>
+  </symbol>
+
+  <symbol id="icon-tray-volume" viewBox="0 0 16 16">
+    <path d="M2 6h2.6L8 3v10L4.6 10H2z" fill="#d9d5cb" stroke="#3a3a3a" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M10 5.4a4 4 0 0 1 0 5.2M12 3.6a6.6 6.6 0 0 1 0 8.8" fill="none" stroke="#1c4d95" stroke-width="1.1"/>
+  </symbol>
+
+  <symbol id="icon-tray-network" viewBox="0 0 16 16">
+    <rect x="1" y="4" width="7" height="5.4" rx=".6" fill="#c9c4b4" stroke="#3a3a3a" stroke-width=".7"/>
+    <rect x="2" y="5" width="5" height="3.4" fill="#2f6ab5"/>
+    <rect x="7.6" y="7.4" width="7" height="5.4" rx=".6" fill="#e5e1d6" stroke="#3a3a3a" stroke-width=".7"/>
+    <rect x="8.6" y="8.4" width="5" height="3.4" fill="#5fdc4a"/>
+  </symbol>
+
+  <symbol id="icon-tray-shield" viewBox="0 0 16 16">
+    <path d="M8 1.4 14 3v5.2c0 3.4-2.6 5.6-6 6.4-3.4-.8-6-3-6-6.4V3z" fill="#d33a2a" stroke="#7a1f14" stroke-width=".7"/>
+    <path d="M8 1.4 14 3v5.2c0 1.2-.3 2.2-.9 3.1H8z" fill="#e8e8e8" opacity=".25"/>
+  </symbol>
+
+  <!-- ══════════ Значки сообщений, 32×32 ══════════ -->
+
+  <symbol id="msg-info" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".8"/>
+    <circle cx="11.5" cy="11" r="4.5" fill="#fff" opacity=".28"/>
+    <text x="16" y="24" text-anchor="middle" font-family="Times New Roman,serif" font-size="21" font-style="italic" font-weight="bold" fill="#fff">i</text>
+  </symbol>
+  <symbol id="msg-question" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" fill="url(#g-globe)" stroke="#0d3a6b" stroke-width=".8"/>
+    <circle cx="11.5" cy="11" r="4.5" fill="#fff" opacity=".28"/>
+    <text x="16" y="24" text-anchor="middle" font-family="Tahoma,Arial" font-size="19" font-weight="bold" fill="#fff">?</text>
+  </symbol>
+  <symbol id="msg-warning" viewBox="0 0 32 32">
+    <path d="M16 2.5 31 29H1z" fill="url(#g-gold)" stroke="#8a5c05" stroke-width=".9" stroke-linejoin="round"/>
+    <text x="16" y="26.5" text-anchor="middle" font-family="Tahoma,Arial" font-size="18" font-weight="bold" fill="#000">!</text>
+  </symbol>
+  <symbol id="msg-error" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14" fill="url(#g-red)" stroke="#6d0c02" stroke-width=".8"/>
+    <circle cx="11.5" cy="11" r="4.5" fill="#fff" opacity=".25"/>
+    <path d="M10.5 10.5 21.5 21.5M21.5 10.5 10.5 21.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- ══════════ Логотип XP для окна «О системе» ══════════ -->
+
+  <symbol id="icon-xp-logo" viewBox="0 0 48 48">
+    <path d="M3 11 21 6.5v16.2L3 23z" fill="#f14a3a"/>
+    <path d="M23.5 5.9 46 0v22.4l-22.5.3z" fill="#7fc242"/>
+    <path d="M3 25.2 21 25v16.2L3 37z" fill="#3d8ee0"/>
+    <path d="M23.5 24.9 46 24.7V48l-22.5-5.9z" fill="#ffc224"/>
+  </symbol>
+</svg>
